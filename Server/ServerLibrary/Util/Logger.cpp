@@ -110,7 +110,7 @@ void LogWriter::log(WCHAR *fmt, va_list args)
 	logMessage += L"\t";
 
 	// 쓰레드 정보 넣기
-	Thread *thread = ThreadManager::GetSingleton().at(threadId);
+	Thread *thread = THREAD_MANAGER.find(threadId);
 	if (thread) {
 		logMessage += thread->name();
 	}

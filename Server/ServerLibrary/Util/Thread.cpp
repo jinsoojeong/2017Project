@@ -8,7 +8,7 @@ Thread::Thread(thread_t *thread, wstr_t name)
 	thread_ = thread;
 	id_ = thread_->get_id();
 
-	ThreadManager::GetSingleton().put(this);
+	THREAD_MANAGER.put(this);
 }
 
 Thread::~Thread()
@@ -41,37 +41,44 @@ Lock* Thread::lock()
 //--------------------------------------------------//
 ThreadManager::~ThreadManager()
 {
-	for (auto thread : threadPool_){
-		SAFE_DELETE(thread.second);
+	for (ThreadPool::iterator itor = thread_pool_.begin() ; itor != thread_pool_.end() ; ++itor)
+	{
+		SAFE_DELETE((*itor).second);
 	}
 }
 
 void ThreadManager::put(Thread *thread)
 {
-	std::pair<threadId_t, Thread *> node(thread->id(), thread);
-	threadPool_.insert(node);
-	Log(L"* create thread : id[0x%X] name[%s], pool size[%d]", thread->id(), thread->name().c_str(), threadPool_.size());
+	thread_pool_.insert(ThreadPool::value_type(thread->id(), thread));
+
+#ifdef _DEBUG
+	Log(L"* create thread : id[0x%X] name[%s], pool size[%d]", thread->id(), thread->name().c_str(), thread_pool_.size());
+#endif //_DEBUG
 }
 
 void ThreadManager::remove(threadId_t id)
 {
-	auto iter = threadPool_.find(id);
-	if (iter == threadPool_.end()) {
+	ThreadPool::iterator itor = thread_pool_.find(id);
+
+	if (itor == thread_pool_.end())
 		return;
-	}
-	auto thread = iter->second;
-	threadPool_.erase(iter);
+
+	Thread* thread = itor->second;
+
+	// 현재는 바로 제거 하지만 해당 스레드 동작 중일 것 이므로 스레드 작업을 정상 종료 시켜줄 기능이 필요함
+	SAFE_DELETE(thread); 
+
+	thread_pool_.erase(itor);
 }
 
-Thread* ThreadManager::at(threadId_t id)
+Thread* ThreadManager::find(threadId_t id)
 {
-	if (threadPool_.empty()) {
+	if (thread_pool_.empty())
 		return nullptr;
-	}
-	auto iter = threadPool_.find(id);
-	if (iter == threadPool_.end()) {
+	
+	ThreadPool::iterator itor = thread_pool_.find(id);
+	if (itor == thread_pool_.end())
 		return nullptr;
-	}
-	auto thread = iter->second;
-	return thread;
+	
+	return (*itor).second;
 }

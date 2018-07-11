@@ -66,21 +66,21 @@ inline void StrConvW2A(WCHAR *src, CHAR *dest, size_t destLen) {
 #define SAFE_DELETE(obj)						\
 {												\
 	if ((obj)) delete(obj);		    			\
-    (obj) = 0L;									\
+    (obj) = nullptr;							\
 }
 // delete object array
 #undef SAFE_DELETE_ARRAY
 #define SAFE_DELETE_ARRAY(arr)					\
 {												\
 	if ((arr)) delete [] (arr);		    		\
-    (arr) = 0L;									\
+    (arr) = nullptr;							\
 }
 
 // delete gameObject
 #define SAFE_FREE(obj)							\
 {												\
 	if ((obj)) obj->free();						\
-    (obj) = 0L;									\
+    (obj) = nullptr;							\
 }
 
 #define SAFE_RELEASE(obj)                       \

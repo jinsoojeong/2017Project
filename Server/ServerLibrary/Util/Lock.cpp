@@ -125,7 +125,7 @@ Thread에서는 걸고있는 Lock 번호가 있음.
 Lock* LockManager::searchLockCycle(Lock *newLock)
 {
 	//list 따라 lock 이름을 비교해 본다.
-	Thread *thread = ThreadManager::GetSingleton().at(GET_CURRENT_THREAD_ID());
+	Thread *thread = THREAD_MANAGER.find(GET_CURRENT_THREAD_ID());
 	if (!thread) {
 		return nullptr;
 	}
@@ -143,7 +143,7 @@ Lock* LockManager::searchLockCycle(Lock *newLock)
 			break;
 		}
 		trace.push_back(threadLock);
-		thread = ThreadManager::GetSingleton().at(threadLock->threadId());
+		thread = THREAD_MANAGER.find(threadLock->threadId());
 		if (!thread) {
 			break;
 		}

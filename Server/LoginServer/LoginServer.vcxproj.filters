@@ -26,18 +26,10 @@
     <Filter Include="Main">
       <UniqueIdentifier>{a38daf6f-b8f6-4b01-8098-0d77334035d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Config">
-      <UniqueIdentifier>{8535cbb4-d924-4b7d-ae76-fc4ccb8f927a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt">
       <Filter>Main</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="config.xml">
-      <Filter>Config</Filter>
-    </Xml>
   </ItemGroup>
 </Project>

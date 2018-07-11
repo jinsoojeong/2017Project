@@ -38,13 +38,5 @@
     <Filter Include="Content">
       <UniqueIdentifier>{e4398d2b-79d0-4664-aa2d-25811fd2b991}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Config">
-      <UniqueIdentifier>{bf926053-a9b3-4fc5-a177-ac7d7be583bb}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="config.xml">
-      <Filter>Config</Filter>
-    </Xml>
   </ItemGroup>
 </Project>

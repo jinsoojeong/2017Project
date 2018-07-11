@@ -8,11 +8,6 @@ typedef std::function<void(void *)> ThreadFunction;
 
 class Thread
 {
-	threadId_t				id_;
-	wstr_t					name_;
-	thread_t				*thread_;
-	Lock					*lock_;			//지금 걸린 락
-	
 public:
 	Thread(thread_t *thread, wstr_t name);
 	~Thread();	
@@ -22,23 +17,28 @@ public:
 
 	void setLock(Lock *lock);
 	Lock *lock();
+
+private:
+	threadId_t				id_;
+	wstr_t					name_;
+	thread_t				*thread_;
+	Lock					*lock_;			//지금 걸린 락
 };
 
 //#define THREAD_POOL_HASHMAP
-class ThreadManager : public Singleton < ThreadManager >
+class ThreadManager : public Singleton<ThreadManager>
 {
-	// HACK: hash_map / unordered_map 에서 get를 할때, 라이브러리에서 버켓 index 에러가 난다.
-	// HACK: 그런 이유로 검증된 map으로 컨테이너 교체를 한다.
-#ifdef THREAD_POOL_HASHMAP
-	hash_map <threadId_t, Thread*> threadPool_;
-#else //THREAD_POOL_HASHMAP
-	map <threadId_t, Thread *> threadPool_;
-#endif //THREAD_POOL_HASHMAP
-
 public:
 	~ThreadManager();
 
 	void put(Thread *thread);
 	void remove(threadId_t id);
-	Thread *at(threadId_t id);
+	Thread* find(threadId_t id);
+
+private:
+	typedef std::map<threadId_t, Thread*> ThreadPool;
+
+	ThreadPool thread_pool_;
 };
+
+#define THREAD_MANAGER ThreadManager::GetSingleton()

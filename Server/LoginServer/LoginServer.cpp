@@ -1,5 +1,5 @@
-// LoginServer.cpp : Defines the entry point for the console application.
-//
+// LoginServer
+// 계정 인증 및 컨텐츠 서버의 입장을 허가하는 작업을 수행
 
 #include "stdafx.h"
 
@@ -28,6 +28,6 @@ void serverProcess()
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	shared_ptr<Thread> serverThread(new Thread(new thread_t(serverProcess), L"Server"));
+	shared_ptr<Thread> server_main_thread(new Thread(new thread_t(serverProcess), L"Server"));
 	return 0;
 }
