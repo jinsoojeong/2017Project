@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Shutdown.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Database\ADODatabase.cpp">
+      <Filter>ADODatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="Database\DBManager.cpp">
+      <Filter>ADODatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Iocp\IOCPServer.cpp">
+      <Filter>Network\IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Iocp\IOCPSession.cpp">
+      <Filter>Network\IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Asio\ASIOServer.cpp">
+      <Filter>Network\ASIO</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Asio\ASIOSession.cpp">
+      <Filter>Network\ASIO</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Assert.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Clock.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Config.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Lock.cpp">
+      <Filter>Utility\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Logger.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Minidump.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Packet\PacketObfuscation.cpp">
+      <Filter>Network\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Packet\PacketAnalyzer.cpp">
+      <Filter>Network\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Thread.cpp">
+      <Filter>Utility\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Task.cpp">
+      <Filter>Utility\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Contents\ContentsProcess.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Database\Query.cpp">
+      <Filter>ADODatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="Database\QueryRecord.cpp">
+      <Filter>ADODatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="Database\QueryStatement.cpp">
+      <Filter>ADODatabase</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Terminal\TerminalSession.cpp">
+      <Filter>Network\Terminal</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Terminal\TerminalManager.cpp">
+      <Filter>Network\Terminal</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Terminal\Terminal.cpp">
+      <Filter>Network\Terminal</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Packet\Stream.cpp">
+      <Filter>Network\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\csv_parser\csv_parser.cpp">
+      <Filter>Utility\csv_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\tinyXml\tinystr.cpp">
+      <Filter>Utility\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\tinyXml\tinyxml.cpp">
+      <Filter>Utility\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\tinyXml\tinyxmlerror.cpp">
+      <Filter>Utility\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\tinyXml\tinyxmlparser.cpp">
+      <Filter>Utility\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Server.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\Session.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\SessionManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\SessionMonitor.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\SMTPMail.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ServerLibrary.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Database\ADODatabase.h">
+      <Filter>ADODatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Database.h">
+      <Filter>ADODatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\DBManager.h">
+      <Filter>ADODatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Iocp\IOCPServer.h">
+      <Filter>Network\IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Iocp\IOCPSession.h">
+      <Filter>Network\IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Asio\ASIOSession.h">
+      <Filter>Network\ASIO</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Asio\ASIOServer.h">
+      <Filter>Network\ASIO</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Assert.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Clock.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Config.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Lock.h">
+      <Filter>Utility\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Logger.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Minidump.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\MemoryLeak.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Memory_LowFragmentationHeap.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\PacketFactory.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\PacketHeader.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\PacketObfuscation.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\PacketClass.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\PacketAnalyzer.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\Package.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Thread.h">
+      <Filter>Utility\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Task.h">
+      <Filter>Utility\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Contents\ContentsProcess.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\Query.h">
+      <Filter>ADODatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\QueryRecord.h">
+      <Filter>ADODatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Database\QueryStatement.h">
+      <Filter>ADODatabase</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Terminal\TerminalSession.h">
+      <Filter>Network\Terminal</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Terminal\TerminalManager.h">
+      <Filter>Network\Terminal</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Terminal\Terminal.h">
+      <Filter>Network\Terminal</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Packet\Stream.h">
+      <Filter>Network\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\csv_parser\csv_parser.hpp">
+      <Filter>Utility\csv_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\tinyXml\tinystr.h">
+      <Filter>Utility\tinyXml</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\tinyXml\tinyxml.h">
+      <Filter>Utility\tinyXml</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Util.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Type.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\ThreadJobQueue.h">
+      <Filter>Utility\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\GameObject.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Monitoring.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\ProgramValidation.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\RandomMT.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Server.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Session.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\SessionManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\SessionMonitor.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\SMTPMail.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Singleton.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Shutdown.h" />
+    <ClInclude Include="Util\Table.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\WinSocket.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Network">
+      <UniqueIdentifier>{ebbbac40-8fe6-494f-a1eb-7390eee9ab91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\IOCP">
+      <UniqueIdentifier>{892ddc58-a807-49c2-8224-3425aa65c0f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\ASIO">
+      <UniqueIdentifier>{4b5c0340-8e72-44f6-b2d4-cb8008b3984a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ADODatabase">
+      <UniqueIdentifier>{56052ee3-121c-40b9-8f88-41fccb9df2d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{5ad5a6a2-809c-41d2-b268-e5be8f1669c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{087dceb9-cacb-4d57-ae53-c6e3ecf65d00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Packet">
+      <UniqueIdentifier>{0857e321-a2e1-4322-8909-549ca0ac7082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{68803e38-475e-47bf-a6ac-8bc2fc0d8c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Terminal">
+      <UniqueIdentifier>{dd41ca48-4518-488b-9ee9-7b5ab5ca5e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\csv_parser">
+      <UniqueIdentifier>{4a8cc968-34b1-43ef-8b70-4b278962c046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\tinyXml">
+      <UniqueIdentifier>{708fb33a-ba89-4f34-a2ce-970031256c0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Thread">
+      <UniqueIdentifier>{df8087f0-a7f2-4d06-ab28-a3ed565d57c1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

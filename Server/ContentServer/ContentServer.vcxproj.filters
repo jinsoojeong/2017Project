@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Server\ContentProcess.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentServer.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Server\ContentProcess.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\User.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\UserManager.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{1b5f38ac-a0e1-49f8-aab4-f4bb37d86fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{e4398d2b-79d0-4664-aa2d-25811fd2b991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{bf926053-a9b3-4fc5-a177-ac7d7be583bb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="config.xml">
+      <Filter>Config</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>
