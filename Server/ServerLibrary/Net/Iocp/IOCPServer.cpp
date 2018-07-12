@@ -71,7 +71,7 @@ bool IOCPServer::run()
 		std::getline(std::wcin, cmdLine);
 
 		Log(L"Input was: %s", cmdLine.c_str());
-		_session_manager.runCommand(cmdLine);
+		SESSION_MANAGER.runCommand(cmdLine);
 	}
 	return true;
 }
@@ -89,15 +89,21 @@ HANDLE IOCPServer::iocp()
 void IOCPServer::onAccept(SOCKET accepter, SOCKADDR_IN addrInfo)
 {
     IOCPSession *session = new IOCPSession();
-	if (session == nullptr) {
+
+	if (session == nullptr) 
+	{
 		Log(L"! accept session create fail");
 		return;
 	}
-	if (!session->onAccept(accepter, addrInfo)) {
+
+	if (!session->onAccept(accepter, addrInfo)) 
+	{
 		SAFE_DELETE(session);
 		return;
 	}
-	if (!_session_manager.addSession(session)) {
+
+	if (!SESSION_MANAGER.addSession(session)) 
+	{
 		SAFE_DELETE(session);
 		return;
 	}
@@ -154,9 +160,10 @@ DWORD WINAPI IOCPServer::workerThread(LPVOID serverPtr)
 			Log(L"! socket data broken");
 			return 0;
 		}
-		if (transferSize == 0) {
+		if (transferSize == 0) 
+		{
 			Log(L"* close by client[%d][%s]", session->id(), session->clientAddress().c_str());
-			_session_manager.closeSession(session);
+			SESSION_MANAGER.closeSession(session);
 			continue;
 		}
 
@@ -176,7 +183,7 @@ DWORD WINAPI IOCPServer::workerThread(LPVOID serverPtr)
 
 		case IO_ERROR:
 			Log(L"* close by client error [%d][%s]", session->id(), session->clientAddress().c_str());
-			_session_manager.closeSession(session);
+			SESSION_MANAGER.closeSession(session);
 			continue;
 		}
 	}

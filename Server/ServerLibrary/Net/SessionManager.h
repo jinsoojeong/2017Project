@@ -5,19 +5,18 @@
 // 세션을 관리 하는 주체
 
 #define SESSION_CAPACITY		(5000)
-#define _session_manager		SessionManager::GetSingleton()
 
 class SessionManager : public Singleton<SessionManager>
 {
 	// 세션의 빈번한 추가삭제를 위해 list로 구성
     typedef list<Session*>		SessionList;
 
-    SessionList		            sessionList_;
-	int									sessionCount_;
-	int									maxConnection_;
-    Lock								lock_;
+    SessionList sessionList_;
+	int sessionCount_;
+	int maxConnection_;
+    Lock lock_;
 
-	oid_t								sessionSeed_;			// 세션 메니져에서 관리하는 시드
+	oid_t sessionSeed_; // 세션 메니져에서 관리하는 시드
 
 	// 서버 수동 명령어
     typedef std::function<void (SessionList *sessionList, wstr_t *arg)> cmdFunc;
@@ -26,16 +25,18 @@ class SessionManager : public Singleton<SessionManager>
 public:
 	SessionManager(int maxConnection = SESSION_CAPACITY);
 	~SessionManager();
-	oid_t				createSessionId();
+	oid_t createSessionId();
 
-	bool				addSession(Session *session);
+	bool addSession(Session *session);
 
-	list<Session*>		&sessionList();
-	bool				closeSession(Session *session);
-	void				forceCloseSession(Session *session);
+	list<Session*> &sessionList();
+	bool closeSession(Session *session);
+	void forceCloseSession(Session *session);
 
-	Session				*session(oid_t id);
+	Session *session(oid_t id);
 
-    void                runCommand(wstr_t cmd);
-    void                commandFuncInitialize();
+    void runCommand(wstr_t cmd);
+    void commandFuncInitialize();
 };
+
+#define SESSION_MANAGER SessionManager::GetSingleton()

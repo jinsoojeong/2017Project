@@ -12,7 +12,7 @@ class SystemReport : public Work
 	}
 };
 
-void serverProcess()
+void ServerProcess()
 {
 	shared_ptr<Server> server(new IOCPServer(new ContentServer()));
 	SystemReport systemReport;

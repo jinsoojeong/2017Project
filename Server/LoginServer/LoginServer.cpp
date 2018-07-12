@@ -12,7 +12,7 @@ class SystemReport : public Work
 	}
 };
 
-void serverProcess()
+void ServerProcess()
 {
 	shared_ptr<Server> server(new IOCPServer(new LoginProcess()));
 	SystemReport systemReport;
@@ -28,6 +28,6 @@ void serverProcess()
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	shared_ptr<Thread> server_main_thread(new Thread(new thread_t(serverProcess), L"Server"));
+	shared_ptr<Thread> server_main_thread(new Thread(new thread_t(ServerProcess), L"Server"));
 	return 0;
 }

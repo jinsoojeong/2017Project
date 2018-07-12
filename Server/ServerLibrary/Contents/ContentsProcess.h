@@ -11,7 +11,6 @@ private:
 	ThreadJobQueue<Package *> *packageQueue_;
 
 protected:
-	//typedef void(*RunFunc)(Session *session, Packet *rowPacket);
 	typedef std::function<void(Session *session, Packet *rowPacket)> RunFunc;
 	unordered_map<PacketType, RunFunc> runFuncTable_;
 

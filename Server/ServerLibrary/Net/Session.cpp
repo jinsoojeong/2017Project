@@ -66,11 +66,13 @@ bool Session::onAccept(SOCKET socket, SOCKADDR_IN addrInfo)
 
 void Session::onClose(bool force)
 {
-	if (force) {
-		_session_manager.forceCloseSession(this);
+	if (force) 
+	{
+		SESSION_MANAGER.forceCloseSession(this);
 	}
-	else {
-		_session_manager.closeSession(this);
+	else 
+	{
+		SESSION_MANAGER.closeSession(this);
 	}
 }
 

@@ -17,7 +17,7 @@ void SessionMonitor::tick()
 {
 	//15초간 반응 없으면 끊기
 	const int MAX_HEART_BEAT = 15 * 1000;
-	auto list = _session_manager.sessionList();
+	auto list = SESSION_MANAGER.sessionList();
 	tick_t now = CLOCK.systemTick();
 
 	for (auto session : list) {

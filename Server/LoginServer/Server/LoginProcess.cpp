@@ -1,18 +1,18 @@
 #include "stdafx.h"
 #include "LoginProcess.h"
 
+#define REGIST_PACKET_PROCESS(type) runFuncTable_.insert(make_pair(E_##type, &LoginProcess::##type))
+
 LoginProcess::LoginProcess()
 {
-	this->registSubPacketFunc();
+	registSubPacketFunc();
 }
 
 void LoginProcess::registSubPacketFunc()
 {
-#define INSERT_PACKET_PROCESS(type)		runFuncTable_.insert(make_pair(E_##type, &LoginProcess::##type))
-
-	INSERT_PACKET_PROCESS(C_REQ_ID_PW);
-	INSERT_PACKET_PROCESS(I_DB_ANS_ID_PW);
-	INSERT_PACKET_PROCESS(I_LOGIN_NOTIFY_ID_LOADED);
+	REGIST_PACKET_PROCESS(C_REQ_ID_PW);
+	REGIST_PACKET_PROCESS(I_DB_ANS_ID_PW);
+	REGIST_PACKET_PROCESS(I_LOGIN_NOTIFY_ID_LOADED);
 }
 
 //---------------------------------------------------------------//
@@ -35,7 +35,7 @@ void LoginProcess::I_DB_ANS_ID_PW(Session *session, Packet *rowPacket)
 	PK_I_DB_ANS_ID_PW *packet = (PK_I_DB_ANS_ID_PW  *)rowPacket;
 	Log(L"* id/ pw result = %d", packet->result_);
 
-	Session *clientSession = _session_manager.session(packet->clientId_);
+	Session *clientSession = SESSION_MANAGER.session(packet->clientId_);
 	if (clientSession == nullptr) {
 		return;
 	}
@@ -67,7 +67,7 @@ void LoginProcess::I_LOGIN_NOTIFY_ID_LOADED(Session *session, Packet *rowPacket)
 	if (packet->result_ == dataNull) {
 		return;
 	}
-	Session *clientSession = _session_manager.session(packet->clientId_);
+	Session *clientSession = SESSION_MANAGER.session(packet->clientId_);
 	if (clientSession == nullptr) {
 		return;
 	}
