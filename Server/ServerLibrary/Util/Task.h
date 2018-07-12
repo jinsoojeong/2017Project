@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 
-#define TICK_INFINTY		0
+#define TICK_INFINTY 0
 
 class Work;
 class TaskNode
@@ -52,3 +52,5 @@ public:
 
 	void add(Work *workObject, int freqSec, int durationSec);
 };
+
+#define TASK_MANAGER TaskManager::GetSingleton()

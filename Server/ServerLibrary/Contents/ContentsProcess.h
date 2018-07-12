@@ -4,6 +4,8 @@
 // 컨텐츠를 여기서 파생해서 구현합니다.
 
 #define MAX_PACKET_THREAD_		SIZE_64
+#define REGIST_PACKET_PROCESS(name, type) runFuncTable_.insert(make_pair(E_##type, &##name::##type))
+
 class ContentsProcess
 {
 private:
@@ -27,7 +29,7 @@ public:
 	
 	void putPackage(Package *package);
 
-	virtual void registSubPacketFunc() = 0;
+	virtual void RegistPacketFunc() = 0;
 
 	//--------------------------------------------------------------//
 	// 기본 패킷 기능 구현

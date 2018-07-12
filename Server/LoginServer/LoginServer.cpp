@@ -7,19 +7,20 @@ class SystemReport : public Work
 {
 	void tick()
 	{
-		Monitoring &moniter = Monitoring::GetSingleton();
-		Log(L"### cpu usage : %2.2f%%, memory usage : %uByte", moniter.processCpuUsage(), moniter.processMemUsage());
+		double cpu_usage = SYSTEM_INFO.GetCpuUsage();
+		size_t mem_usage = SYSTEM_INFO.GetMemUsage();
+
+		Log(L"### cpu usage : %2.2f%%, memory usage : %uByte", cpu_usage, mem_usage);
 	}
 };
 
 void ServerProcess()
 {
-	shared_ptr<Server> server(new IOCPServer(new LoginProcess()));
-	SystemReport systemReport;
-	const int MONITOR_REPORTING_SEC = 1;
-	TaskManager::GetSingleton().add(&systemReport, MONITOR_REPORTING_SEC, TICK_INFINTY);
+	Work* system_report = new SystemReport();
+	TASK_MANAGER.add(system_report, 1, TICK_INFINTY);
 
-	if (!server->run()) 
+	shared_ptr<Server> server(new IOCPServer(new LoginProcess()));
+	if (server->run()) 
 	{
 		Log(L"! error: server start fail");
 		return;
@@ -29,5 +30,6 @@ void ServerProcess()
 int _tmain(int argc, _TCHAR* argv[])
 {
 	shared_ptr<Thread> server_main_thread(new Thread(new thread_t(ServerProcess), L"Server"));
+
 	return 0;
 }

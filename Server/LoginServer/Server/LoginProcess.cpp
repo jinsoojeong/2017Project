@@ -1,32 +1,30 @@
 #include "stdafx.h"
 #include "LoginProcess.h"
 
-#define REGIST_PACKET_PROCESS(type) runFuncTable_.insert(make_pair(E_##type, &LoginProcess::##type))
-
 LoginProcess::LoginProcess()
 {
-	registSubPacketFunc();
+	RegistPacketFunc();
 }
 
-void LoginProcess::registSubPacketFunc()
+void LoginProcess::RegistPacketFunc()
 {
-	REGIST_PACKET_PROCESS(C_REQ_ID_PW);
-	REGIST_PACKET_PROCESS(I_DB_ANS_ID_PW);
-	REGIST_PACKET_PROCESS(I_LOGIN_NOTIFY_ID_LOADED);
+	REGIST_PACKET_PROCESS(LoginProcess, C_REQ_ID_PW);
+	REGIST_PACKET_PROCESS(LoginProcess, I_DB_ANS_ID_PW);
+	REGIST_PACKET_PROCESS(LoginProcess, I_LOGIN_NOTIFY_ID_LOADED);
 }
 
 //---------------------------------------------------------------//
 //패킷 처리 정의
-void LoginProcess::C_REQ_ID_PW(Session *session, Packet *rowPacket)
+void LoginProcess::C_REQ_ID_PW(Session *session, Packet *packet)
 {
-	PK_C_REQ_ID_PW *packet = (PK_C_REQ_ID_PW *)rowPacket;
+	PK_C_REQ_ID_PW *msg = (PK_C_REQ_ID_PW *)packet;
 
 	PK_I_DB_REQ_ID_PW dbPacket;
 	dbPacket.clientId_ = (UInt64)session->id();
-	dbPacket.id_ = packet->id_;
-	dbPacket.password_ = packet->password_;
+	dbPacket.id_ = msg->id_;
+	dbPacket.password_ = msg->password_;
 
-	Terminal *terminal = _terminal.get(L"DBAgent");
+	Terminal *terminal = TERMINAL_MANAGER.get(L"DBAgent");
 	terminal->sendPacket(&dbPacket);
 }
 
@@ -36,12 +34,12 @@ void LoginProcess::I_DB_ANS_ID_PW(Session *session, Packet *rowPacket)
 	Log(L"* id/ pw result = %d", packet->result_);
 
 	Session *clientSession = SESSION_MANAGER.session(packet->clientId_);
-	if (clientSession == nullptr) {
+	if (clientSession == nullptr)
 		return;
-	}
 
 	const int authFail = 0;
-	if (packet->result_ == authFail) {
+	if (packet->result_ == authFail)
+	{
 		PK_S_ANS_ID_PW_FAIL ansPacket;
 		clientSession->sendPacket(&ansPacket);
 		return;
@@ -50,10 +48,14 @@ void LoginProcess::I_DB_ANS_ID_PW(Session *session, Packet *rowPacket)
 	PK_I_CHTTING_NOTIFY_ID iPacket;
 	iPacket.oidAccountId_ = packet->oidAccountId_;
 	iPacket.clientId_ = packet->clientId_;
-	Terminal *terminal = _terminal.get(L"ContentServer");
-	if (terminal == nullptr) {
+
+	Terminal *terminal = TERMINAL_MANAGER.get(L"ContentServer");
+	if (terminal == nullptr)
+	{
 		Log(L"! Chatting Server terminal is not connected");
+		return;
 	}
+	
 	terminal->sendPacket(&iPacket);
 }
 
@@ -71,7 +73,7 @@ void LoginProcess::I_LOGIN_NOTIFY_ID_LOADED(Session *session, Packet *rowPacket)
 	if (clientSession == nullptr) {
 		return;
 	}
-	Terminal *terminal = _terminal.get(L"ContentServer");
+	Terminal *terminal = TERMINAL_MANAGER.get(L"ContentServer");
 	if (terminal == nullptr) {
 		Log(L"! Chatting Server terminal is not connected");
 	}

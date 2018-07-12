@@ -4,15 +4,13 @@
 
 DBAgentProcess::DBAgentProcess()
 {
-	this->registSubPacketFunc();
+	RegistPacketFunc();
 }
 
-void DBAgentProcess::registSubPacketFunc()
+void DBAgentProcess::RegistPacketFunc()
 {
-#define INSERT_PACKET_PROCESS(type)		runFuncTable_.insert(make_pair(E_##type, &DBAgentProcess::##type))
-
-	INSERT_PACKET_PROCESS(I_DB_REQ_ID_PW);
-	INSERT_PACKET_PROCESS(I_DB_REQ_LOAD_DATA);
+	REGIST_PACKET_PROCESS(DBAgentProcess, I_DB_REQ_ID_PW);
+	REGIST_PACKET_PROCESS(DBAgentProcess, I_DB_REQ_LOAD_DATA);
 }
 
 void DBAgentProcess::I_DB_REQ_ID_PW(Session *session, Packet *rowPacket)

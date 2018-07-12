@@ -1,8 +1,6 @@
 #pragma once
 #include "stdafx.h"
 
-#define _terminal			TerminalManager::GetSingleton()
-
 // 다른 서버간의 연결을 위한 통로
 class TerminalManager : public Singleton<TerminalManager>
 {
@@ -21,3 +19,5 @@ public:
 	bool isTerminal(const char *ip);
 	void run(Server *server);
 };
+
+#define TERMINAL_MANAGER TerminalManager::GetSingleton()

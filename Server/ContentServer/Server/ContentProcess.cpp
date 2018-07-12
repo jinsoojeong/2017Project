@@ -3,18 +3,16 @@
 
 ContentServer::ContentServer()
 {
-	this->registSubPacketFunc();
+	RegistPacketFunc();
 }
 
-void ContentServer::registSubPacketFunc()
+void ContentServer::RegistPacketFunc()
 {
-#define INSERT_PACKET_PROCESS(type)		runFuncTable_.insert(make_pair(E_##type, &ContentServer::##type))
-
-	INSERT_PACKET_PROCESS(I_CHTTING_NOTIFY_ID);
-	INSERT_PACKET_PROCESS(I_DB_ANS_PARSE_DATA);
-	INSERT_PACKET_PROCESS(C_REQ_REGIST_CHATTING_NAME);
-	INSERT_PACKET_PROCESS(C_REQ_CHATTING);
-	INSERT_PACKET_PROCESS(C_REQ_EXIT);
+	REGIST_PACKET_PROCESS(ContentServer, I_CHTTING_NOTIFY_ID);
+	REGIST_PACKET_PROCESS(ContentServer, I_DB_ANS_PARSE_DATA);
+	REGIST_PACKET_PROCESS(ContentServer, C_REQ_REGIST_CHATTING_NAME);
+	REGIST_PACKET_PROCESS(ContentServer, C_REQ_CHATTING);
+	REGIST_PACKET_PROCESS(ContentServer, C_REQ_EXIT);
 }
 
 //---------------------------------------------------------------//
@@ -27,7 +25,7 @@ void ContentServer::I_CHTTING_NOTIFY_ID(Session *session, Packet *rowPacket)
 	dbPacket.clientId_ = packet->clientId_;
 	dbPacket.oidAccountId_ = packet->oidAccountId_;
 
-	Terminal *terminal = _terminal.get(L"DBAgent");
+	Terminal *terminal = TERMINAL_MANAGER.get(L"DBAgent");
 	terminal->sendPacket(&dbPacket);
 }
 
@@ -41,7 +39,7 @@ void ContentServer::I_DB_ANS_PARSE_DATA(Session *session, Packet *rowPacket)
 	iPacket.result_ = packet->result_;
 
 	Log(L"* [%S] name load from db", iPacket.name_.c_str());
-	Terminal *terminal = _terminal.get(L"LoginServer");
+	Terminal *terminal = TERMINAL_MANAGER.get(L"LoginServer");
 	terminal->sendPacket(&iPacket);
 }
 

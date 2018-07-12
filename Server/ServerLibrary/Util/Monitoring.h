@@ -2,31 +2,27 @@
 #include "stdafx.h"
 #include "psapi.h"
 
-class Monitoring : public Singleton<Monitoring>
+class SystemInfo : public Singleton<SystemInfo>
 {
-	ULARGE_INTEGER lastCPU, lastSysCPU, lastUserCPU;
-	int numProcessors;
-	HANDLE self;
-
 public:
-	Monitoring() 
+	SystemInfo()
 	{
 		SYSTEM_INFO sysInfo;
 		FILETIME ftime, fsys, fuser;
 
 		GetSystemInfo(&sysInfo);
-		numProcessors = sysInfo.dwNumberOfProcessors;
+		num_processors_ = sysInfo.dwNumberOfProcessors;
 
 		GetSystemTimeAsFileTime(&ftime);
-		memcpy(&lastCPU, &ftime, sizeof(FILETIME));
+		memcpy(&last_cpu_, &ftime, sizeof(FILETIME));
 
-		self = GetCurrentProcess();
-		GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
-		memcpy(&lastSysCPU, &fsys, sizeof(FILETIME));
-		memcpy(&lastUserCPU, &fuser, sizeof(FILETIME));
+		self_ = GetCurrentProcess();
+		GetProcessTimes(self_, &ftime, &ftime, &fsys, &fuser);
+		memcpy(&last_sys_cpu_, &fsys, sizeof(FILETIME));
+		memcpy(&last_user_cpu_, &fuser, sizeof(FILETIME));
 	}
 
-	double processCpuUsage() 
+	double GetCpuUsage() 
 	{
 		FILETIME ftime, fsys, fuser;
 		ULARGE_INTEGER now, sys, user;
@@ -35,12 +31,12 @@ public:
 		GetSystemTimeAsFileTime(&ftime);
 		memcpy(&now, &ftime, sizeof(FILETIME));
 
-		GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
+		GetProcessTimes(self_, &ftime, &ftime, &fsys, &fuser);
 		memcpy(&sys, &fsys, sizeof(FILETIME));
 		memcpy(&user, &fuser, sizeof(FILETIME));
-		percent = (double)((sys.QuadPart - lastSysCPU.QuadPart) + (user.QuadPart - lastUserCPU.QuadPart));
-		percent /= (now.QuadPart - lastCPU.QuadPart);
-		percent /= numProcessors;
+		percent = (double)((sys.QuadPart - last_sys_cpu_.QuadPart) + (user.QuadPart - last_user_cpu_.QuadPart));
+		percent /= (now.QuadPart - last_cpu_.QuadPart);
+		percent /= num_processors_;
 //		lastCPU = now;
 //		lastUserCPU = user;
 //		lastSysCPU = sys;
@@ -48,14 +44,14 @@ public:
 		return fixInRange(0, percent, 100);
 	}
 
-	SIZE_T processMemUsage()
+	SIZE_T GetMemUsage()
 	{
 		PROCESS_MEMORY_COUNTERS pmc;
 		GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
 		return (size_t) pmc.WorkingSetSize;
 	}
 
-	SIZE_T physyicMemUsage()
+	SIZE_T GetPhysyicMemUsage()
 	{
 		MEMORYSTATUSEX memInfo;
 		memInfo.dwLength = sizeof(MEMORYSTATUSEX);
@@ -63,4 +59,13 @@ public:
 
 		return (size_t) memInfo.ullTotalPhys - memInfo.ullAvailPhys;
 	}
+
+private:
+	ULARGE_INTEGER last_cpu_;
+	ULARGE_INTEGER last_sys_cpu_;
+	ULARGE_INTEGER last_user_cpu_;
+	int num_processors_;
+	HANDLE self_;
 };
+
+#define SYSTEM_INFO SystemInfo::GetSingleton()

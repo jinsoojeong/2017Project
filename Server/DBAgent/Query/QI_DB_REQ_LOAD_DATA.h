@@ -36,7 +36,7 @@ public:
 			record_.moveNext();
 		}
 
-		Terminal *terminal = _terminal.get(L"ContentServer");
+		Terminal *terminal = TERMINAL_MANAGER.get(L"ContentServer");
 		terminal->sendPacket(&iPacket);
 	}
 };

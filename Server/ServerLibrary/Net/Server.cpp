@@ -30,10 +30,10 @@ Server::~Server()
 void Server::initialize(xml_t *config)
 {
 	//터미널 설정
-	_terminal.run(this);
+	TERMINAL_MANAGER.run(this);
 
 	//테스크 설정
-	TaskManager::GetSingleton();
+	TASK_MANAGER;
 
 	//서버 설정
 	xmlNode_t *root = config->FirstChildElement("App")->FirstChildElement("Server");

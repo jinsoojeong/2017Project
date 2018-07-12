@@ -9,8 +9,7 @@ SessionMonitor::SessionMonitor()
 	}
 	init = true;
 
-	const int MONITOR_REPORTING_SEC = 1;
-	TaskManager::GetSingleton().add(this, MONITOR_REPORTING_SEC, TICK_INFINTY);
+	TASK_MANAGER.add(this, 1, TICK_INFINTY);
 }
 
 void SessionMonitor::tick()

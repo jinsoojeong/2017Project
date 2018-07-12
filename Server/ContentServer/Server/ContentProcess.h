@@ -6,7 +6,7 @@ class ContentServer : public ContentsProcess
 public:
 	ContentServer();
 private:
-	void registSubPacketFunc();
+	void RegistPacketFunc();
 
 	static void I_CHTTING_NOTIFY_ID(Session *session, Packet *rowPacket);
 	static void I_DB_ANS_PARSE_DATA(Session *session, Packet *rowPacket);
