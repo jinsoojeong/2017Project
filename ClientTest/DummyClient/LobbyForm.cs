@@ -10,19 +10,21 @@ using System.Windows.Forms;
 
 namespace DummyClient
 {
-    public partial class ChattingForm : Form
+    public partial class LobbyForm : Form
     {
         private ChatWnd chatWnd_ = null;
 
-        public ChattingForm()
+        public LobbyForm()
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
             chatWnd_ = new ChatWnd(richTextBox_view_);
             Program.programState_.putMessage_ += new ProgramState.putMessageDele(pushText);
+
+            richTextBox_view_.Text = "로비 서버로 접속되었습니다." + Environment.NewLine;
         }
 
-        ~ChattingForm()
+        ~LobbyForm()
         {
             base.Dispose();
             chatWnd_ = null;
@@ -32,8 +34,7 @@ namespace DummyClient
         {
             if (e.KeyCode == Keys.Enter)
             {
-                String inputStr = textBox_input_.Text + Environment.NewLine;
-                richTextBox_view_.Text += inputStr;
+                String inputStr = textBox_input_.Text;
                 textBox_input_.Clear();
 
                 PK_C_REQ_CHATTING packet = new PK_C_REQ_CHATTING();
@@ -48,6 +49,16 @@ namespace DummyClient
         public void pushText(string text)
         {
             chatWnd_.pushText(text);
+        }
+
+        private void Btn_Start_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Btn_Cancel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

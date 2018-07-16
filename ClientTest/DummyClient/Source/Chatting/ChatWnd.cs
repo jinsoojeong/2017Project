@@ -51,9 +51,10 @@ namespace DummyClient
 
             String str = outputView_.Text;
             int len = str.LastIndexOf('\n');
-            if (len < 0) {
+
+            if (len < 0)
                 return;
-            }
+            
             outputView_.SelectionStart = len;
             outputView_.ScrollToCaret();
         }

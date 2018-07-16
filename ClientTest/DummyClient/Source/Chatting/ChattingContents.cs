@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DummyClient
 {
-    class ChattingContents : ContentsProcess
+    class LobbyContents : ContentsProcess
     {
         public void recvChatting(PacketInterface rowPacket)
         {

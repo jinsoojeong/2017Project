@@ -44,11 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChattingForm.cs">
+    <Compile Include="LobbyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChattingForm.Designer.cs">
-      <DependentUpon>ChattingForm.cs</DependentUpon>
+    <Compile Include="LobbyForm.Designer.cs">
+      <DependentUpon>LobbyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DummyClient.cs">
       <SubType>Form</SubType>
@@ -80,8 +80,8 @@
     <Compile Include="Source\PacketProcess.cs" />
     <Compile Include="Source\Network\PacketUtil.cs" />
     <Compile Include="Source\ProgramState.cs" />
-    <EmbeddedResource Include="ChattingForm.resx">
-      <DependentUpon>ChattingForm.cs</DependentUpon>
+    <EmbeddedResource Include="LobbyForm.resx">
+      <DependentUpon>LobbyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DummyClient.resx">
       <DependentUpon>DummyClient.cs</DependentUpon>

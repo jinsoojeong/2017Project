@@ -7,25 +7,28 @@ using System.Windows.Forms;
 
 namespace DummyClient
 {
-    class ChattingPacketProcess : PacketProcess
+    class LobbyPacketProcess : PacketProcess
     {
-        ChattingContents contents_ = null;
+        LobbyContents contents_ = null;
 
-        public ChattingPacketProcess()
+        public LobbyPacketProcess()
         {
-            contents_ = new ChattingContents();
+            contents_ = new LobbyContents();
         }
 
         public override void run(PacketInterface packet)
         {
             PacketType type = (PacketType)packet.type();
-            switch (type) {
+
+            switch (type)
+            {
             case PacketType.E_S_ANS_CHATTING:
                 contents_.recvChatting(packet);
                 return;
             }
 
-            if (base.defaultRun(packet) == false) {
+            if (base.defaultRun(packet) == false)
+            {
 #if DEBUG
                 MessageBox.Show("잘못된 패킷이 수신되었습니다 : " + type.ToString(), "error", MessageBoxButtons.OK);
                 Application.Exit();

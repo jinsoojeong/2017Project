@@ -68,18 +68,21 @@ namespace DummyClient
         }
     }
 
-    internal class ChattingFormState : FormState
+    internal class LobbyFormState : FormState
     {
         public override void open(string ip, uint port)
         {
-            form_ = new ChattingForm();
+            form_ = new LobbyForm();
             setForm();
-            if (!base.connectToServer(ip, port)) {
-                MessageBox.Show("채팅 서버 연결에 실패 했습니다..",
-                                "error", MessageBoxButtons.OK);
+
+            if (!base.connectToServer(ip, port))
+            {
+                MessageBox.Show("채팅 서버 연결에 실패 했습니다..", "error", MessageBoxButtons.OK);
                 Program.programState_.setState(PROGRAM_STATE.LOGIN, null, 0);
+
             }
-            network_.setPacketProcess(new ChattingPacketProcess());
+
+            network_.setPacketProcess(new LobbyPacketProcess());
         }
     }
 }

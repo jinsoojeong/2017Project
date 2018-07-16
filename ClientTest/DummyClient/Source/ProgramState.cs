@@ -6,7 +6,8 @@ namespace DummyClient
     internal enum PROGRAM_STATE
     {
         LOGIN,
-        CHATTING,
+        LOBBY,
+        GAME,
         MAX,
     }
 
@@ -26,8 +27,8 @@ namespace DummyClient
                 formState_ = new LoginFormState();
                 break;
 
-            case PROGRAM_STATE.CHATTING:
-                formState_ = new ChattingFormState();
+            case PROGRAM_STATE.LOBBY:
+                formState_ = new LobbyFormState();
                 break;
             }
         }

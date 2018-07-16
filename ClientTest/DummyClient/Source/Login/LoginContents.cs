@@ -18,7 +18,7 @@ namespace DummyClient
         {
             PK_S_ANS_ID_PW_SUCCESS packet = (PK_S_ANS_ID_PW_SUCCESS)rowPacket;
                         
-            Program.programState_.setState(PROGRAM_STATE.CHATTING, packet.ip_, packet.port_);
+            Program.programState_.setState(PROGRAM_STATE.LOBBY, packet.ip_, packet.port_);
             Program.programState_.setName(packet.name_);
 
             PK_C_REQ_REGIST_CHATTING_NAME rPacket = new PK_C_REQ_REGIST_CHATTING_NAME();
