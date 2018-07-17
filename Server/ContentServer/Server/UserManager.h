@@ -33,3 +33,5 @@ public:
 		return userPool_.size();
 	}
 };
+
+#define USER_MANAGER UserManager::GetSingleton()

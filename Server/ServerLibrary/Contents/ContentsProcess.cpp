@@ -39,9 +39,10 @@ void ContentsProcess::initialize(xml_t *config)
 	}
 
 	packageQueue_ = new ThreadJobQueue<Package *> (L"ContentsProcessQueue");
-	for (int i = 0; i < processCount; ++i) {
+
+	for (int i = 0; i < processCount; ++i)
 		threadPool_[i] = MAKE_THREAD(ContentsProcess, process);
-	}
+	
 	this->registDefaultPacketFunc();
 }
 
@@ -60,35 +61,41 @@ void ContentsProcess::putPackage(Package *package)
 void ContentsProcess::run(Package *package)
 {
 	PacketType type = package->packet_->type();
+
 	auto itr = runFuncTable_.find(type);
-	if (itr == runFuncTable_.end()) {
+	if (itr == runFuncTable_.end()) 
+	{
 		Log(L"! invaild packet runFunction. type[%d]", type);
 		package->session_->onClose();
 		return;
 	}
+
 	RunFunc runFunction = itr->second;
+
 #ifdef _DEBUG
 	Log(L"*** [%d] packet run ***", type);
 #endif //_DEBUG
+
 	runFunction(package->session_, package->packet_);
 }
 
 void ContentsProcess::execute()
 {
 	Package *package = nullptr;
-	if (packageQueue_->pop(package) == false) {
-		return;
-	}
 
-	this->run(package);
+	if (packageQueue_->pop(package) == false)
+		return;
+
+	run(package);
 	
 	SAFE_DELETE(package);
 }
 
 void ContentsProcess::process()
 {
-	while (_shutdown == false) {
-		this->execute();
+	while (_shutdown == false) 
+	{
+		execute();
 		CONTEXT_SWITCH;
 	}
 }

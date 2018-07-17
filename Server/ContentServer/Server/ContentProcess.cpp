@@ -46,7 +46,7 @@ void ContentServer::I_DB_ANS_PARSE_DATA(Session *session, Packet *rowPacket)
 void ContentServer::C_REQ_REGIST_CHATTING_NAME(Session *session, Packet *rowPacket)
 {
 	PK_C_REQ_REGIST_CHATTING_NAME *packet = (PK_C_REQ_REGIST_CHATTING_NAME *)rowPacket;
-	User *user = UserManager::GetSingleton().at(session->id());
+	User *user = USER_MANAGER.at(session->id());
 	if (user != nullptr) {
 		Log(L"! try duplicate regist : %s, name : %S", session->clientAddress().c_str(), packet->name_.c_str());
 		session->onClose();
@@ -57,7 +57,7 @@ void ContentServer::C_REQ_REGIST_CHATTING_NAME(Session *session, Packet *rowPack
 	array<WCHAR, SIZE_64> userName;
 	StrConvA2W((CHAR *)packet->name_.c_str(), userName.data(), userName.size());
 	user->setName(userName.data());
-	UserManager::GetSingleton().insert(user);
+	USER_MANAGER.insert(user);
 	
 	Log(L"* user [%s] created from [%S]", userName.data(), session->clientAddress().c_str());
 }
@@ -66,7 +66,7 @@ void ContentServer::C_REQ_CHATTING(Session *session, Packet *rowPacket)
 {
 	PK_C_REQ_CHATTING *packet = (PK_C_REQ_CHATTING *)rowPacket;
 	
-	User *user = UserManager::GetSingleton().at(session->id());
+	User *user = USER_MANAGER.at(session->id());
 	if (user == nullptr) {
 		Log(L"! not registed : %s", session->clientAddress().c_str());
 		session->onClose();
@@ -88,13 +88,16 @@ void ContentServer::C_REQ_EXIT(Session *session, Packet *rowPacket)
 {
 	//클라이언트 read thread 를 종료시켜 주기 위해 처리
 	PK_C_REQ_EXIT *packet = (PK_C_REQ_EXIT *)rowPacket;
-	User *user = UserManager::GetSingleton().at(session->id());
-	if (user == nullptr) {
+	User *user = USER_MANAGER.at(session->id());
+	
+	if (user == nullptr) 
+	{
 		Log(L"! not registed : %s", session->clientAddress().c_str());
 		session->onClose();
 		return;
 	}
-	UserManager::GetSingleton().remove(session->id());
+
+	USER_MANAGER.remove(session->id());
 
 	PK_S_ANS_EXIT ansPacket;
 	Log(L"* recv exit packet by [%s]", session->clientAddress().c_str());

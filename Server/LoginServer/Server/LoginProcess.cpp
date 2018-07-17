@@ -66,9 +66,9 @@ void LoginProcess::I_LOGIN_NOTIFY_ID_LOADED(Session *session, Packet *rowPacket)
 	const int dataNull = 0;
 	// msg failover 처리가 제대로 되지 않음
 	// 데이터 없을 시 그대로 return 문으로 돌아감
-	if (packet->result_ == dataNull) {
+	if (packet->result_ == dataNull)
 		return;
-	}
+	
 	Session *clientSession = SESSION_MANAGER.session(packet->clientId_);
 	if (clientSession == nullptr) {
 		return;

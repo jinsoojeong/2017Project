@@ -57,8 +57,7 @@ namespace DummyClient
             form_ = new LoginForm();
             setForm();
             if (!base.connectToServer(loginIp_, loginPort_)) {
-                var result = MessageBox.Show("로그인 서버 연결에 실패. 다시 연결 시도 해볼까요?",
-                                             "error", MessageBoxButtons.RetryCancel);
+                var result = MessageBox.Show("로그인 서버 연결에 실패. 다시 연결 시도 해볼까요?", "error", MessageBoxButtons.RetryCancel);
                 if (result != DialogResult.Retry) {
                     form_.Close();
                     Application.Exit();

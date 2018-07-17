@@ -33,6 +33,17 @@
             this.Btn_Start = new System.Windows.Forms.Button();
             this.Btn_Cancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ping_label_ = new System.Windows.Forms.Label();
+            this.total_user_label_ = new System.Windows.Forms.Label();
+            this.lobby_user_label_ = new System.Windows.Forms.Label();
+            this.waiting_user_lable_ = new System.Windows.Forms.Label();
+            this.playing_user_label_ = new System.Windows.Forms.Label();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox_input_
@@ -77,12 +88,122 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.playing_user_label_);
+            this.groupBox1.Controls.Add(this.waiting_user_lable_);
+            this.groupBox1.Controls.Add(this.lobby_user_label_);
+            this.groupBox1.Controls.Add(this.total_user_label_);
+            this.groupBox1.Controls.Add(this.ping_label_);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(522, 96);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(180, 294);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Lobby Info";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("굴림", 10F);
+            this.label1.Location = new System.Drawing.Point(6, 27);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 14);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Ping : ";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("굴림", 10F);
+            this.label2.Location = new System.Drawing.Point(6, 51);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 14);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Total User : ";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("굴림", 10F);
+            this.label3.Location = new System.Drawing.Point(6, 102);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(105, 14);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Waiting User : ";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("굴림", 10F);
+            this.label4.Location = new System.Drawing.Point(6, 127);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(105, 14);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Playing User : ";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("굴림", 10F);
+            this.label5.Location = new System.Drawing.Point(6, 76);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 14);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Lobby User : ";
+            // 
+            // ping_label_
+            // 
+            this.ping_label_.AutoSize = true;
+            this.ping_label_.Font = new System.Drawing.Font("굴림", 10F);
+            this.ping_label_.Location = new System.Drawing.Point(63, 27);
+            this.ping_label_.Name = "ping_label_";
+            this.ping_label_.Size = new System.Drawing.Size(12, 14);
+            this.ping_label_.TabIndex = 5;
+            this.ping_label_.Text = " ";
+            // 
+            // total_user_label_
+            // 
+            this.total_user_label_.AutoSize = true;
+            this.total_user_label_.Font = new System.Drawing.Font("굴림", 10F);
+            this.total_user_label_.Location = new System.Drawing.Point(92, 51);
+            this.total_user_label_.Name = "total_user_label_";
+            this.total_user_label_.Size = new System.Drawing.Size(12, 14);
+            this.total_user_label_.TabIndex = 6;
+            this.total_user_label_.Text = " ";
+            // 
+            // lobby_user_label_
+            // 
+            this.lobby_user_label_.AutoSize = true;
+            this.lobby_user_label_.Font = new System.Drawing.Font("굴림", 10F);
+            this.lobby_user_label_.Location = new System.Drawing.Point(99, 76);
+            this.lobby_user_label_.Name = "lobby_user_label_";
+            this.lobby_user_label_.Size = new System.Drawing.Size(12, 14);
+            this.lobby_user_label_.TabIndex = 7;
+            this.lobby_user_label_.Text = " ";
+            // 
+            // waiting_user_lable_
+            // 
+            this.waiting_user_lable_.AutoSize = true;
+            this.waiting_user_lable_.Font = new System.Drawing.Font("굴림", 10F);
+            this.waiting_user_lable_.Location = new System.Drawing.Point(108, 102);
+            this.waiting_user_lable_.Name = "waiting_user_lable_";
+            this.waiting_user_lable_.Size = new System.Drawing.Size(12, 14);
+            this.waiting_user_lable_.TabIndex = 8;
+            this.waiting_user_lable_.Text = " ";
+            // 
+            // playing_user_label_
+            // 
+            this.playing_user_label_.AutoSize = true;
+            this.playing_user_label_.Font = new System.Drawing.Font("굴림", 10F);
+            this.playing_user_label_.Location = new System.Drawing.Point(108, 127);
+            this.playing_user_label_.Name = "playing_user_label_";
+            this.playing_user_label_.Size = new System.Drawing.Size(12, 14);
+            this.playing_user_label_.TabIndex = 9;
+            this.playing_user_label_.Text = " ";
             // 
             // LobbyForm
             // 
@@ -99,6 +220,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LobbyForm";
             this.Text = "LobbyForm";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,5 +234,15 @@
         private System.Windows.Forms.Button Btn_Start;
         private System.Windows.Forms.Button Btn_Cancel;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lobby_user_label_;
+        private System.Windows.Forms.Label total_user_label_;
+        private System.Windows.Forms.Label ping_label_;
+        private System.Windows.Forms.Label waiting_user_lable_;
+        private System.Windows.Forms.Label playing_user_label_;
     }
 }

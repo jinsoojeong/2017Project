@@ -61,9 +61,10 @@ bool IOCPServer::run()
 	this->createListenSocket();
 	
 	acceptThread_ = MAKE_THREAD(IOCPServer, acceptThread);
-	for (int i = 0; i < workerThreadCount_; ++i) {
+
+	for (int i = 0; i < workerThreadCount_; ++i) 
 		workerThread_[i] = MAKE_THREAD(IOCPServer, workerThread);
-	}
+	
 	this->status_ = SERVER_READY;
 
 	while (!_shutdown) {
