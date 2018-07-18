@@ -10,22 +10,25 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="Server\UserManager.cpp">
+      <Filter>Content\User</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server\ContentProcess.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\User.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="Server\UserManager.h">
-      <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\User.h">
+      <Filter>Content\User</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\UserManager.h">
+      <Filter>Content\User</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +40,9 @@
     </Filter>
     <Filter Include="Content">
       <UniqueIdentifier>{e4398d2b-79d0-4664-aa2d-25811fd2b991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\User">
+      <UniqueIdentifier>{225df55f-76e2-499b-9edb-6788109f810a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #pragma once
 
-// 
+// 로그인 서버의 MainProcess
+
 #include "stdafx.h"
 
 class LoginProcess : public ContentsProcess

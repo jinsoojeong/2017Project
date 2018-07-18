@@ -163,9 +163,11 @@ namespace DummyClient
 
         private void heartBeat()
         {
-            while (this.isConnected()) {
+            while (this.isConnected())
+            {
                 PK_C_NOTIFY_HEARTBEAT heartBeatPacket = new PK_C_NOTIFY_HEARTBEAT();
-                this.sendPacket(heartBeatPacket);
+                sendPacket(heartBeatPacket);
+
                 Thread.Sleep(1000);
             }
         }

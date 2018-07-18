@@ -12,12 +12,12 @@ private:
         READ_QUEUE,
         MAX_QUEUE,
     };
-    std::queue<T>		queue_[MAX_QUEUE];
+    std::queue<T> queue_[MAX_QUEUE];
 
-    std::queue<T>		*writeQueue_;	//input 용 여러 쓰레드에서 입력을 받음
-    std::queue<T>		*readQueue_;	//output 용. 한 쓰레드에서 출력을 함
+    std::queue<T>* writeQueue_;	//input 용 여러 쓰레드에서 입력을 받음
+    std::queue<T>* readQueue_;	//output 용. 한 쓰레드에서 출력을 함
 
-    Lock		        lock_;
+    Lock lock_;
 
 public:
     ThreadJobQueue(WCHAR* name)

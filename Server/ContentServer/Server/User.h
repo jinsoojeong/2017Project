@@ -15,6 +15,11 @@ public:
 		return session_;
 	}
 
+	void Update()
+	{
+
+	}
+
 	void tick()
 	{
 		

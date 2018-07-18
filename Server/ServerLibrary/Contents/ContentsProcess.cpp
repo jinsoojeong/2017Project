@@ -13,37 +13,19 @@ ContentsProcess::ContentsProcess()
 
 ContentsProcess::~ContentsProcess()
 {
-	SAFE_DELETE(packageQueue_);
+	SAFE_DELETE(msg_queue_);
 
-	for (auto thread : threadPool_) {
+	for (Thread* thread : threadPool_)
 		SAFE_DELETE(thread);
-	}
+	
 	runFuncTable_.clear();
 }
 
 void ContentsProcess::initialize(xml_t *config)
 {
-	xmlNode_t *root = config->FirstChildElement("App")->FirstChildElement("Contents");
-	if (!root) 
-	{
-		ErrorLog(L"* not exist process setting");
-		return;
-	}
-	xmlNode_t *elem = root->FirstChildElement("ThreadCount");
-	int processCount = 0;
-	sscanf_s(elem->GetText(), "%d", &processCount);
-
-	if (MAX_PACKET_THREAD_ < processCount) {
-		ErrorLog(L"! processThread limit[%d], but config setting [%d]", MAX_PACKET_THREAD_, processCount);
-		return;
-	}
-
-	packageQueue_ = new ThreadJobQueue<Package *> (L"ContentsProcessQueue");
-
-	for (int i = 0; i < processCount; ++i)
-		threadPool_[i] = MAKE_THREAD(ContentsProcess, process);
-	
-	this->registDefaultPacketFunc();
+	msg_queue_ = new ThreadJobQueue<Package *> (L"ContentsProcessQueue");
+	threadPool_[0] = MAKE_THREAD(ContentsProcess, process);
+	registDefaultPacketFunc();
 }
 
 void ContentsProcess::registDefaultPacketFunc()
@@ -55,10 +37,10 @@ void ContentsProcess::registDefaultPacketFunc()
 
 void ContentsProcess::putPackage(Package *package)
 {
-	packageQueue_->push(package);
+	msg_queue_->push(package);
 }
 
-void ContentsProcess::run(Package *package)
+void ContentsProcess::MsgHandler(Package *package)
 {
 	PacketType type = package->packet_->type();
 
@@ -79,24 +61,25 @@ void ContentsProcess::run(Package *package)
 	runFunction(package->session_, package->packet_);
 }
 
-void ContentsProcess::execute()
+void ContentsProcess::TryPopMsgCmd()
 {
-	Package *package = nullptr;
+	Package *msg = nullptr;
 
-	if (packageQueue_->pop(package) == false)
-		return;
+	while (msg_queue_->pop(msg))
+	{
+		MsgHandler(msg);
+		SAFE_DELETE(msg);
+	}
 
-	run(package);
-	
-	SAFE_DELETE(package);
 }
 
 void ContentsProcess::process()
 {
 	while (_shutdown == false) 
 	{
-		execute();
-		CONTEXT_SWITCH;
+		TryPopMsgCmd();
+
+		Update();
 	}
 }
 
@@ -104,9 +87,9 @@ void ContentsProcess::process()
 // 기본 패킷 기능 구현
 void ContentsProcess::Packet_HeartBeat(Session *session, Packet *rowPacket)
 {
-	if (session->type() != SESSION_TYPE_CLIENT) {
+	if (session->type() != SESSION_TYPE_CLIENT)
 		return;
-	}
+	
 	session->updateHeartBeat();
 }
 

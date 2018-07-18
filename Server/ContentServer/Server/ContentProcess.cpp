@@ -15,6 +15,11 @@ void ContentServer::RegistPacketFunc()
 	REGIST_PACKET_PROCESS(ContentServer, C_REQ_EXIT);
 }
 
+void Update()
+{
+	USER_MANAGER.Update();
+}
+
 //---------------------------------------------------------------//
 //패킷 처리 정의
 void ContentServer::I_CHTTING_NOTIFY_ID(Session *session, Packet *rowPacket)

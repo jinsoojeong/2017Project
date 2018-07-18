@@ -1,37 +1,24 @@
 #pragma once
-#include "stdafx.h"
+
 class User;
 class Session;
 
-class UserManager : public Singleton < UserManager >
+class UserManager : public Singleton <UserManager>
 {
-	unordered_map<oid_t, User*> userPool_;
-
 public:
-	void insert(User *user)
-	{
-		oid_t key = user->session()->id();
-		userPool_.insert(make_pair(key, user));
-	}
+	UserManager() {};
+	~UserManager() {};
 
-	void remove(oid_t id)
-	{
-		userPool_.erase(id);
-	}
+	void Update();
 
-	User* at(oid_t id)
-	{
- 		auto itr = userPool_.lower_bound(id);
-		if (itr == userPool_.end()) {
-			return nullptr;
-		}
-		return itr->second;
-	}
+	void insert(User *user);
+	void remove(oid_t id);
+	User* at(oid_t id);
+	size_t size() { return users_.size(); }
 
-	size_t size()
-	{
-		return userPool_.size();
-	}
+private:
+	typedef unordered_map<oid_t, User*> Users;
+	Users users_;
 };
 
 #define USER_MANAGER UserManager::GetSingleton()
