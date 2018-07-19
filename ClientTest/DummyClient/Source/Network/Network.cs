@@ -25,6 +25,8 @@ namespace DummyClient
         private NET_STATE state_ = NET_STATE.START;
 
         private PacketProcess packetProcee_;
+        private long ping_ = 0;
+
         ~Network()
         {
             if (this.isConnected()) {
@@ -163,10 +165,12 @@ namespace DummyClient
 
         private void heartBeat()
         {
-            while (this.isConnected())
+            while (isConnected())
             {
                 PK_C_NOTIFY_HEARTBEAT heartBeatPacket = new PK_C_NOTIFY_HEARTBEAT();
                 sendPacket(heartBeatPacket);
+
+                ping_ = DateTime.Now.Ticks;
 
                 Thread.Sleep(1000);
             }
