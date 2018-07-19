@@ -15,7 +15,7 @@ void ContentServer::RegistPacketFunc()
 	REGIST_PACKET_PROCESS(ContentServer, C_REQ_EXIT);
 }
 
-void Update()
+void ContentServer::Update()
 {
 	USER_MANAGER.Update();
 }
