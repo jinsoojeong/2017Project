@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------//
 // 타입 정의
 typedef UINT64					object_t;
-typedef UINT64					oid_t;
+typedef DWORD					oid_t;
 typedef int32_t					packet_size_t;
 
 typedef std::time_t				tick_t;

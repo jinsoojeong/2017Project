@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
 
-class SessionMonitor : public Work
+class SessionMonitor : public WorkObject
 {
 public :
 	SessionMonitor();
 	void tick();
 };
+
 static SessionMonitor sessionMonitor;

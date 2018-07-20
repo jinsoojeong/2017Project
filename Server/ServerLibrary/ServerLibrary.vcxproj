@@ -202,7 +202,6 @@
     <ClInclude Include="Util\Config.h" />
     <ClInclude Include="Util\csv_parser\csv_parser.hpp" />
     <ClInclude Include="Util\ProgramValidation.h" />
-    <ClInclude Include="Util\GameObject.h" />
     <ClInclude Include="Util\Lock.h" />
     <ClInclude Include="Util\Logger.h" />
     <ClInclude Include="Util\MemoryLeak.h" />

@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="ContentServer.cpp" />
     <ClCompile Include="Server\ContentProcess.cpp" />
+    <ClCompile Include="Server\User.cpp" />
     <ClCompile Include="Server\UserManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

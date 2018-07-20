@@ -87,7 +87,7 @@ void ContentsProcess::process()
 // 기본 패킷 기능 구현
 void ContentsProcess::Packet_HeartBeat(Session *session, Packet *rowPacket)
 {
-	if (session->type() != SESSION_TYPE_CLIENT)
+	if (session->GetType() != SESSION_TYPE_CLIENT)
 		return;
 	
 	session->updateHeartBeat();
@@ -95,7 +95,7 @@ void ContentsProcess::Packet_HeartBeat(Session *session, Packet *rowPacket)
 
 void ContentsProcess::Packet_Notify_Terminal(Session *session, Packet *rowPacket)
 {
-	session->setType(SESSION_TYPE_TERMINAL);
+	session->SetType(SESSION_TYPE_TERMINAL);
 	Log(L"* [%s] Terminal accepted.", session->clientAddress().c_str());
 }
 

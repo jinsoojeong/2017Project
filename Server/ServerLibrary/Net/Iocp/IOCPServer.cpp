@@ -89,7 +89,7 @@ HANDLE IOCPServer::iocp()
 
 void IOCPServer::onAccept(SOCKET accepter, SOCKADDR_IN addrInfo)
 {
-    IOCPSession *session = new IOCPSession();
+    IOCPSession *session = new IOCPSession(SESSION_MANAGER.GenerateID());
 
 	if (session == nullptr) 
 	{
@@ -108,7 +108,7 @@ void IOCPServer::onAccept(SOCKET accepter, SOCKADDR_IN addrInfo)
 		SAFE_DELETE(session);
 		return;
 	}
-	session->ioData_[IO_READ].clear();
+	session->ClearIoData(IO_READ);
 
 	HANDLE handle = CreateIoCompletionPort((HANDLE)accepter, this->iocp(), (ULONG_PTR)&(*session), NULL);
 	if (!handle) {
@@ -163,7 +163,7 @@ DWORD WINAPI IOCPServer::workerThread(LPVOID serverPtr)
 		}
 		if (transferSize == 0) 
 		{
-			Log(L"* close by client[%d][%s]", session->id(), session->clientAddress().c_str());
+			Log(L"* close by client[%d][%s]", session->GetID(), session->clientAddress().c_str());
 			SESSION_MANAGER.closeSession(session);
 			continue;
 		}
@@ -183,7 +183,7 @@ DWORD WINAPI IOCPServer::workerThread(LPVOID serverPtr)
 			continue;
 
 		case IO_ERROR:
-			Log(L"* close by client error [%d][%s]", session->id(), session->clientAddress().c_str());
+			Log(L"* close by client error [%d][%s]", session->GetID(), session->clientAddress().c_str());
 			SESSION_MANAGER.closeSession(session);
 			continue;
 		}

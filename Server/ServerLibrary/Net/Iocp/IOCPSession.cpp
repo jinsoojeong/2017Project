@@ -107,15 +107,18 @@ WSABUF IoData::wsabuf()
 }
 
 //-----------------------------------------------------------------//
-IOCPSession::IOCPSession()
-: Session()
+IOCPSession::IOCPSession(DWORD id) : Session(id)
 {
-	this->initialize();
+	initialize();
+}
+
+IOCPSession::~IOCPSession()
+{
 }
 
 void IOCPSession::initialize()
 {
-	ZeroMemory(&socketData_, sizeof(SOCKET_DATA));
+	ZeroMemory(&socket_data_, sizeof(SOCKET_DATA));
 	ioData_[IO_READ].setType(IO_READ);
 	ioData_[IO_WRITE].setType(IO_WRITE);
 }
@@ -132,7 +135,7 @@ void IOCPSession::recv(WSABUF wsaBuf)
 {
 	DWORD flags = 0;
 	DWORD recvBytes;
-	DWORD errorCode = WSARecv(socketData_.socket_, &wsaBuf, 1, &recvBytes, &flags, ioData_[IO_READ].overlapped(), NULL);
+	DWORD errorCode = WSARecv(socket_data_.socket_, &wsaBuf, 1, &recvBytes, &flags, ioData_[IO_READ].overlapped(), NULL);
 	this->checkErrorIO(errorCode);
 }
 
@@ -160,7 +163,7 @@ void IOCPSession::send(WSABUF wsaBuf)
 {
 	DWORD flags = 0;
 	DWORD sendBytes;
-	DWORD errorCode = WSASend(socketData_.socket_, &wsaBuf, 1, &sendBytes, flags, ioData_[IO_WRITE].overlapped(), NULL);
+	DWORD errorCode = WSASend(socket_data_.socket_, &wsaBuf, 1, &sendBytes, flags, ioData_[IO_WRITE].overlapped(), NULL);
 	this->checkErrorIO(errorCode);
 }
 

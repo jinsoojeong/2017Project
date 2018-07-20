@@ -221,9 +221,6 @@
     <ClInclude Include="Util\ThreadJobQueue.h">
       <Filter>Utility\Thread</Filter>
     </ClInclude>
-    <ClInclude Include="Util\GameObject.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Util\Monitoring.h">
       <Filter>Utility</Filter>
     </ClInclude>

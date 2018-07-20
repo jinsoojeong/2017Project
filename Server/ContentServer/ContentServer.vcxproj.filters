@@ -13,6 +13,9 @@
     <ClCompile Include="Server\UserManager.cpp">
       <Filter>Content\User</Filter>
     </ClCompile>
+    <ClCompile Include="Server\User.cpp">
+      <Filter>Content\User</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server\ContentProcess.h">

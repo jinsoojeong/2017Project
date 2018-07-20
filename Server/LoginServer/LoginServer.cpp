@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-class SystemReport : public Work
+class SystemReport : public WorkObject
 {
 	void tick()
 	{
@@ -16,8 +16,7 @@ class SystemReport : public Work
 
 void ServerProcess()
 {
-	Work* system_report = new SystemReport();
-	TASK_MANAGER.add(system_report, 1, TICK_INFINTY);
+	TASK_MANAGER.add(new SystemReport(), 1, TICK_INFINTY);
 
 	shared_ptr<Server> server(new IOCPServer(new LoginProcess()));
 	if (server->run()) 
