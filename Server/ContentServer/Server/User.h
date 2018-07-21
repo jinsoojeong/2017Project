@@ -1,27 +1,19 @@
 #pragma once
 #include "stdafx.h"
+#include "User.h"
 
-class User : public GameObject
+class User
 {
-	Session *session_;
 public:
-	User(Session *session)
-	{
-		session_ = session;
-	}
+	User(Session *session);
+	void Update();
 	
-	Session* session()
-	{
-		return session_;
-	}
+	const Session& GetSession() { return *session_; }
 
-	void Update()
-	{
+	void SetNick(const std::wstring& nick) { nick_ = nick; }
+	const std::wstring& GetNick() { return nick_; }
 
-	}
-
-	void tick()
-	{
-		
-	}
+private:
+	Session* session_;
+	std::wstring nick_;
 };

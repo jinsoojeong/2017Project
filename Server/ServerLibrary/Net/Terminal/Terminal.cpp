@@ -6,11 +6,14 @@ Terminal::Terminal(Server *server, wstr_t name)
 {
 	server_ = server;
 	name_ = name;
+
+	session_ = new TerminalSession(SESSION_MANAGER.GenerateID());
 }
 
 Terminal::~Terminal()
 {
 	status_ = TERMINAL_STOP;
+	SAFE_DELETE(session_);
 }
 
 void Terminal::initialize(xmlNode_t *config)
@@ -34,7 +37,7 @@ TERMINAL_STATUS& Terminal::status()
 void Terminal::sendPacket(Packet *packet)
 {
 	if (status_ == TERMINAL_READY) {
-		session_.sendPacket(packet);
+		session_->sendPacket(packet);
 	}
 }
 
@@ -51,14 +54,17 @@ int Terminal::port()
 void Terminal::connectProcess()
 {
 CONNECT_START:
+
 	int tryCount = 0;
-	while (_shutdown == false) {
-		if (session_.connectTo(ip_, port_)) {
+	while (_shutdown == false) 
+	{	
+		if (session_->connectTo(ip_, port_))
 			break;
-		}
+		
 		Log(L"* try connect [%s] server[%S]:[%d]... [%d]", name_.c_str(), ip_, port_, tryCount++);
 		Sleep(1000);        // 1초마다 연결 시도
 	}
+
 	status_ = TERMINAL_READY;
 
 	// 자신이 터미널 세션임을 알려준다.
@@ -66,12 +72,15 @@ CONNECT_START:
 	this->sendPacket(&terminalPacket);
 
 	Log(L"* [%s]terminal connect [%S]:[%d] ready", name_.c_str(), ip_, port_);
-	while (_shutdown == false) {
-		Package *package = session_.onRecv(0);
 
-		if (package == nullptr) {
+	while (_shutdown == false) 
+	{
+		Package *package = session_->onRecv(0);
+
+		if (package == nullptr) 
+		{
 			Log(L"! termnal [%s] disconnected !", name_.c_str());
-			session_.onClose();
+			session_->onClose();
 			goto CONNECT_START;
 		}
 
