@@ -2,9 +2,12 @@
 #include "SessionManager.h"
 #include "./Iocp/IOCPServer.h"
 
-SessionManager::SessionManager(int maxConnection) : lock_(L"SessionManager"), seed_(0), maxConnection_(maxConnection)
+SessionManager::SessionManager(int maxConnection)
+	: lock_(L"SessionManager")
 {
-	commandFuncInitialize();
+	sessionSeed_ = 1;
+	maxConnection_ = maxConnection;
+	this->commandFuncInitialize();
 }
 
 SessionManager::~SessionManager()
@@ -12,10 +15,9 @@ SessionManager::~SessionManager()
 	vector<Session *> removeSessionVec;
 	removeSessionVec.resize(sessionList_.size());
 	std::copy(sessionList_.begin(), sessionList_.end(), removeSessionVec.begin());
-
-	for (auto session : removeSessionVec)
+	for (auto session : removeSessionVec) {
 		session->onClose();
-	
+	}
 	sessionList_.clear();
 }
 
@@ -24,23 +26,26 @@ list<Session*>& SessionManager::sessionList()
 	return sessionList_;
 }
 
+oid_t SessionManager::createSessionId()
+{
+	return sessionSeed_++;
+}
+
 bool SessionManager::addSession(Session *session)
 {
 	SAFE_LOCK(lock_);
 	auto findSession = std::find(sessionList_.begin(), sessionList_.end(), session);
-	
-	if (findSession != sessionList_.end())
+	if (findSession != sessionList_.end()) {
 		return false;
-	
-	if (sessionCount_ > maxConnection_) 
-	{
+	}
+	if (sessionCount_ > maxConnection_) {
 		Log(L"* session so busy. count[%d]", sessionCount_);
 		return false;
 	}
 
+	session->setId(this->createSessionId());
 	sessionList_.push_back(session);
 	++sessionCount_;
-
 	return true;
 }
 
@@ -82,14 +87,13 @@ void SessionManager::forceCloseSession(Session *session)
 	this->closeSession(session);
 }
 
-Session* SessionManager::Find(DWORD id)
+Session* SessionManager::session(oid_t id)
 {
 	SAFE_LOCK(lock_);
 	Session *findSession = nullptr;
 
-	for (auto session : sessionList_) 
-	{
-		if (session->GetID() == id) {
+	for (auto session : sessionList_) {
+		if (session->id() == id) {
 			findSession = session;
 			break;
 		}

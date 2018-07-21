@@ -19,15 +19,13 @@ void SessionMonitor::tick()
 	auto list = SESSION_MANAGER.sessionList();
 	tick_t now = CLOCK.systemTick();
 
-	for (auto session : list) 
-	{
-		if (session->GetType() != SESSION_TYPE_CLIENT)
+	for (auto session : list) {
+		if (session->type() != SESSION_TYPE_CLIENT) {
 			continue;
+		}
 
 		tick_t lastTick = session->heartBeat();
-
-		if (now - lastTick > MAX_HEART_BEAT) 
-		{
+		if (now - lastTick > MAX_HEART_BEAT) {
 			Log(L"* [%s] Closing by heartBeat", session->clientAddress().c_str());
 			session->onClose(true);
 		}

@@ -11,13 +11,13 @@ public:
 
 	void Update();
 
-	bool Regist(User* user);
-	void UnRegist(DWORD id);
-	User* Find(DWORD id);
-	DWORD CurrentCount() { return static_cast<DWORD>(users_.size()); }
+	void insert(User *user);
+	void remove(oid_t id);
+	User* at(oid_t id);
+	size_t size() { return users_.size(); }
 
 private:
-	typedef unordered_map<DWORD, User*> Users;
+	typedef unordered_map<oid_t, User*> Users;
 	Users users_;
 };
 

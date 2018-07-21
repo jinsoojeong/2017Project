@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "Task.h"
 
-TaskNode::TaskNode(WorkObject *workObject, int freqSec, int durationSec)
+TaskNode::TaskNode(Work *workObject, int freqSec, int durationSec)
 {
 	workObject_ = workObject;
 	freqSec_ = freqSec;
 	durationSec_ = durationSec;
-	nextTick();
+	this->nextTick();
 }
 
 TaskNode::~TaskNode()
@@ -65,8 +65,7 @@ void Task::remove(TaskNode *taskNode)
 
 void Task::process()
 {
-	while (!_shutdown) 
-	{
+	while (!_shutdown) {
 		std::vector<TaskNode *> deleteNodes;
 		for (auto taskNode : taskList_) {
 			if (taskNode->expired()) {
@@ -79,7 +78,6 @@ void Task::process()
 		for (auto node : deleteNodes) {
 			this->remove(node);
 		}
-
 		CONTEXT_SWITCH;
 	}
 }
@@ -128,13 +126,12 @@ TaskManager::~TaskManager()
 	}
 }
 
-void TaskManager::add(WorkObject *workObject, int freqSec, int durationSec)
+void TaskManager::add(Work *workObject, int freqSec, int durationSec)
 {
 	const int MINIMAL_THREAD_COUNT = 1;
-
-	if (threadCount_ < MINIMAL_THREAD_COUNT) 
+	if (threadCount_ < MINIMAL_THREAD_COUNT) {
 		return;
-
+	}
 	static int nodeCount = 0;
 	
 	TaskNode *node = new TaskNode(workObject, freqSec, durationSec);

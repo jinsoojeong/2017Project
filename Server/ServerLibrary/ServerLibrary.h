@@ -54,6 +54,7 @@ typedef void(*Function)(void *);
 #include "./Util/Type.h"
 #include "./Util/Util.h"
 
+#include "./Util/GameObject.h"
 #include "./Util/Singleton.h"
 #include "./Util/RandomMT.h"
 

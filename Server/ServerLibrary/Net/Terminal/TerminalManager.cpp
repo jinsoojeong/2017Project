@@ -27,9 +27,9 @@ void TerminalManager::initialize(xml_t *config)
 		array<WCHAR, _MAX_PATH> terminalName;
 		StrConvA2W((char *)elem->Value(), terminalName.data(), terminalName.max_size());
 
-		//Terminal *terminal = new Terminal(server_, terminalName.data());
-		//terminal->initialize(elem);
-		//this->put(terminalName.data(), terminal);
+		Terminal *terminal = new Terminal(server_, terminalName.data());
+		terminal->initialize(elem);
+		this->put(terminalName.data(), terminal);
 
 		elem = elem->NextSiblingElement();
 	}

@@ -8,10 +8,24 @@
 
 class SessionManager : public Singleton<SessionManager>
 {
+	// 세션의 빈번한 추가삭제를 위해 list로 구성
+    typedef list<Session*>		SessionList;
+
+    SessionList sessionList_;
+	int sessionCount_;
+	int maxConnection_;
+    Lock lock_;
+
+	oid_t sessionSeed_; // 세션 메니져에서 관리하는 시드
+
+	// 서버 수동 명령어
+    typedef std::function<void (SessionList *sessionList, wstr_t *arg)> cmdFunc;
+	unordered_map<wstr_t, cmdFunc>   serverCommand_;
+
 public:
 	SessionManager(int maxConnection = SESSION_CAPACITY);
 	~SessionManager();
-	DWORD GenerateID() { return seed_++; };
+	oid_t createSessionId();
 
 	bool addSession(Session *session);
 
@@ -19,23 +33,10 @@ public:
 	bool closeSession(Session *session);
 	void forceCloseSession(Session *session);
 
-	Session* Find(DWORD id);
+	Session *session(oid_t id);
 
     void runCommand(wstr_t cmd);
     void commandFuncInitialize();
-
-private:
-	typedef list<Session*> SessionList;
-
-	SessionList sessionList_;
-	int sessionCount_;
-	int maxConnection_;
-	Lock lock_;
-
-	DWORD seed_;
-
-	typedef std::function<void(SessionList *sessionList, wstr_t *arg)> cmdFunc;
-	unordered_map<wstr_t, cmdFunc>   serverCommand_;
 };
 
 #define SESSION_MANAGER SessionManager::GetSingleton()

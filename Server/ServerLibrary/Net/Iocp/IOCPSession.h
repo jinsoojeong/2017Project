@@ -4,13 +4,11 @@ class Session;
 class SessionManager;
 class Package;
 
-enum IO_OPERATION
-{
+typedef enum {
 	IO_READ,
 	IO_WRITE,
-	IO_ERROR
-};
-
+	IO_ERROR,
+} IO_OPERATION;
 #define IO_DATA_MAX     (2)
 
 class IoData
@@ -43,21 +41,25 @@ public:
 class IOCPSession : public Session
 {
 public:
-	IOCPSession(DWORD id);
-	~IOCPSession();
-
-	void			initialize();
-	void			checkErrorIO(DWORD ret);
-	void			recv(WSABUF wsaBuf);
-	bool			isRecving(size_t transferSize);
-	void			send(WSABUF wsaBuf);
-	void			onSend(size_t transferSize);
-	void		    sendPacket(Packet *packet);
-	void ClearIoData(IO_OPERATION io_operation) { ioData_[io_operation].clear(); }
-	void			recvStandBy();
-	Package*		onRecv(size_t transferSize);
+	array<IoData, IO_DATA_MAX> ioData_;
 
 private:
-	array<IoData, IO_DATA_MAX> ioData_;
+	void			initialize();
+
+	void			checkErrorIO(DWORD ret);
+
+	void			recv(WSABUF wsaBuf);
+	bool			isRecving(size_t transferSize);
+
+	void			send(WSABUF wsaBuf);
+
+public:
+    IOCPSession();
+
+	void			onSend(size_t transferSize);
+	void		    sendPacket(Packet *packet);
 	
+	Package*		onRecv(size_t transferSize);
+    void			recvStandBy();
+
 };

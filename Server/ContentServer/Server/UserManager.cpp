@@ -3,35 +3,26 @@
 
 void UserManager::Update()
 {
-	std::for_each(users_.begin(), users_.end(), [](Users::value_type itor) { (itor).second->Update(); });
+	//std::for_each(users_.begin(), users_.end(), [](Users::iterator itor) { (*itor).second->Update(); });
 }
 
-bool UserManager::Regist(User* user)
+void UserManager::insert(User* user)
 {
-	DWORD uid = user->GetSession().id();
-
-	if (users_.find(uid) != users_.end())
-	{
-		Log(L"user login failed - already user login id:[%d]", uid);
-		return false;
-	}
-
-	users_.insert(Users::value_type(uid, user));
-
-	return true;
+	oid_t key = user->session()->id();
+	users_.insert(make_pair(key, user));
 }
 
-void UserManager::UnRegist(DWORD uid)
+void UserManager::remove(oid_t id)
 {
-	users_.erase(uid);
+	users_.erase(id);
 }
 
-User* UserManager::Find(DWORD uid)
+User* UserManager::at(oid_t id)
 {
-	Users::iterator itor = users_.find(uid);
-
-	if (itor == users_.end())
+	auto itr = users_.lower_bound(id);
+	
+	if (itr == users_.end())
 		return nullptr;
 	
-	return (*itor).second;
+	return itr->second;
 }
