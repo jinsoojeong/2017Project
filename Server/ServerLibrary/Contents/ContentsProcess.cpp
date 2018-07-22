@@ -4,28 +4,26 @@
 
 ContentsProcess::ContentsProcess()
 {
-	xml_t config;
-	if (!loadConfig(&config)) {
-		return;
-	}
-	this->initialize(&config);
+	msg_queue_ = new ThreadJobQueue<Package *>(L"ContentsProcessQueue");
+	registDefaultPacketFunc();
 }
 
 ContentsProcess::~ContentsProcess()
 {
 	SAFE_DELETE(msg_queue_);
-
-	for (Thread* thread : threadPool_)
-		SAFE_DELETE(thread);
+	SAFE_DELETE(content_main_thread);
 	
 	runFuncTable_.clear();
 }
 
-void ContentsProcess::initialize(xml_t *config)
+bool ContentsProcess::Run()
 {
-	msg_queue_ = new ThreadJobQueue<Package *> (L"ContentsProcessQueue");
-	threadPool_[0] = MAKE_THREAD(ContentsProcess, process);
-	registDefaultPacketFunc();
+	content_main_thread = MAKE_THREAD(ContentsProcess, process);
+
+	if (content_main_thread == nullptr)
+		return false;
+
+	return true;
 }
 
 void ContentsProcess::registDefaultPacketFunc()
@@ -75,10 +73,9 @@ void ContentsProcess::TryPopMsgCmd()
 
 void ContentsProcess::process()
 {
-	while (_shutdown == false) 
+	while (!_shutdown)
 	{
 		TryPopMsgCmd();
-
 		Update();
 	}
 }

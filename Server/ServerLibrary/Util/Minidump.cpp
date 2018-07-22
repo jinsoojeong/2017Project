@@ -45,5 +45,3 @@ LONG WINAPI MiniDump::execptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
 
     return EXCEPTION_CONTINUE_SEARCH;
 }
-
-static MiniDump minidump;

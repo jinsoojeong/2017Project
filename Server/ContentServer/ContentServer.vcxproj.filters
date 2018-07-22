@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Server\ContentProcess.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="ContentServer.cpp">
       <Filter>Main</Filter>
     </ClCompile>
@@ -18,9 +15,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server\ContentProcess.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -32,6 +26,9 @@
     </ClInclude>
     <ClInclude Include="Server\UserManager.h">
       <Filter>Content\User</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentServer.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

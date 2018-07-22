@@ -4,12 +4,17 @@
 SessionMonitor::SessionMonitor() 
 {
 	static bool init = false;
-	if (init) {
+
+	if (init)
 		return;
-	}
+
 	init = true;
 
 	TASK_MANAGER.add(this, 1, TICK_INFINTY);
+}
+
+SessionMonitor::~SessionMonitor()
+{
 }
 
 void SessionMonitor::tick()

@@ -12,7 +12,8 @@ class ProgramValidation
 	void checkSMTP()
 	{
 		SOCKET smtpSocket;
-		if (!connectSMTP(&smtpSocket)) {
+		if (!connectSMTP(&smtpSocket)) 
+		{
 			Log(L"! The smtp server is not loaded.");
 
 #ifndef _DEBUG
@@ -82,5 +83,3 @@ public:
 		this->checkSMTP();
 	}
 };
-
-static ProgramValidation programValidation;

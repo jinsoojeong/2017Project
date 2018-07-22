@@ -13,21 +13,22 @@ enum SERVER_STATUS {
 class Server
 {
 protected:
-	char					ip_[16];
-	int						port_;
-	int						workerThreadCount_;
+	char ip_[16];
+	int port_;
+	int workerThreadCount_;
 
-	SERVER_STATUS			status_;
-	ContentsProcess			*contentsProcess_;
+	SERVER_STATUS status_;
+	ContentsProcess *contentsProcess_;
 
 public:
 	Server(ContentsProcess *contentsProcess);
 	virtual ~Server();
 
-	virtual void			initialize(xml_t *config);
+	virtual void initialize(xml_t *config);
+	void static initialize();
 
-	virtual bool			run() = 0;
-	SERVER_STATUS			&status();
+	virtual bool run();
+	SERVER_STATUS &status();
 
-	void					putPackage(Package *package);
+	void putPackage(Package *package);
 };

@@ -50,14 +50,15 @@ public:
 //---------------------------------------------------------------------//
 class TaskManager : public Singleton <TaskManager>
 {
-	int                     threadCount_;
-	std::vector<Task *>     taskPool_;
+	int threadCount_;
+	std::vector<Task *> taskPool_;
 
 public:
 	TaskManager();
 	virtual ~TaskManager();
 
 	void initialize(xml_t *config);
+	void Finalize();
 
 	void add(WorkObject *workObject, int freqSec, int durationSec);
 };

@@ -6,7 +6,6 @@ class ContentServer : public ContentsProcess
 public:
 	ContentServer();
 
-protected:
 	void Update() override;
 	
 private:

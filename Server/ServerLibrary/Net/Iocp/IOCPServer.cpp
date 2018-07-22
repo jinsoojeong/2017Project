@@ -5,6 +5,7 @@
 IOCPServer::IOCPServer(ContentsProcess *contentsProcess)
 :Server(contentsProcess)
 {
+
 }
 
 IOCPServer::~IOCPServer()
@@ -49,31 +50,28 @@ bool IOCPServer::createListenSocket()
 
 bool IOCPServer::run()
 {
+	Server::run();
+
 	if (MAX_IOCP_THREAD < workerThreadCount_) {
 		ErrorLog(L"! workerThread limit[%d], but config setting [%d]", MAX_IOCP_THREAD, workerThreadCount_);
 		return false;
 	}
 
 	iocp_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, workerThreadCount_);
-	if (iocp_ == nullptr) {
+
+	if (iocp_ == nullptr)
 		return false;
-	}
-	this->createListenSocket();
 	
+	createListenSocket();
+	
+	// 
 	acceptThread_ = MAKE_THREAD(IOCPServer, acceptThread);
 
 	for (int i = 0; i < workerThreadCount_; ++i) 
 		workerThread_[i] = MAKE_THREAD(IOCPServer, workerThread);
 	
-	this->status_ = SERVER_READY;
+	status_ = SERVER_READY;
 
-	while (!_shutdown) {
-		wstring cmdLine;
-		std::getline(std::wcin, cmdLine);
-
-		Log(L"Input was: %s", cmdLine.c_str());
-		SESSION_MANAGER.runCommand(cmdLine);
-	}
 	return true;
 }
 
@@ -129,9 +127,11 @@ DWORD WINAPI IOCPServer::acceptThread(LPVOID serverPtr)
 		SOCKADDR_IN recvAddr;
 		static int addrLen = sizeof(recvAddr);
 		acceptSocket = WSAAccept(server->listenSocket(), (struct sockaddr *)&recvAddr, &addrLen, NULL, 0);
-		if (acceptSocket == SOCKET_ERROR) {
-			if (!server->status() == SERVER_STOP) {
-				Log(L"! Accept fail");
+		if (acceptSocket == SOCKET_ERROR) 
+		{
+			if (!server->status() == SERVER_STOP) 
+			{
+				Log(L"Accept Stop! - Server Stop");
 				break;
 			}
 		}

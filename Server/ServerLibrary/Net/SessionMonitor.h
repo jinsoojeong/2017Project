@@ -5,7 +5,6 @@ class SessionMonitor : public WorkObject
 {
 public :
 	SessionMonitor();
+	~SessionMonitor();
 	void tick();
 };
-
-static SessionMonitor sessionMonitor;

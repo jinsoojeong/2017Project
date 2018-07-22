@@ -8,7 +8,7 @@ void UserManager::Update()
 
 bool UserManager::Regist(User* user)
 {
-	DWORD uid = user->GetSession().id();
+	DWORD uid = user->GetSession().GetID();
 
 	if (users_.find(uid) != users_.end())
 	{

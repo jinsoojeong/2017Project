@@ -2,7 +2,7 @@
 #include "Thread.h"
 #include "Lock.h"
 
-Thread::Thread(thread_t *thread, wstr_t name)
+Thread::Thread(std::thread *thread, wstr_t name)
 {
 	name_ = name;
 	thread_ = thread;
@@ -18,7 +18,7 @@ Thread::~Thread()
 	SAFE_DELETE(lock_);
 }
 
-threadId_t Thread::id()
+std::thread::id Thread::id()
 {
 	return id_;
 }
@@ -56,7 +56,7 @@ void ThreadManager::put(Thread *thread)
 #endif //_DEBUG
 }
 
-void ThreadManager::remove(threadId_t id)
+void ThreadManager::remove(std::thread::id id)
 {
 	ThreadPool::iterator itor = thread_pool_.find(id);
 
@@ -71,7 +71,7 @@ void ThreadManager::remove(threadId_t id)
 	thread_pool_.erase(itor);
 }
 
-Thread* ThreadManager::find(threadId_t id)
+Thread* ThreadManager::find(std::thread::id id)
 {
 	if (thread_pool_.empty())
 		return nullptr;

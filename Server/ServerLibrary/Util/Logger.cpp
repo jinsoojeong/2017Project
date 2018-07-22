@@ -105,7 +105,7 @@ void LogWriter::log(WCHAR *fmt, ...)
 void LogWriter::log(WCHAR *fmt, va_list args)
 {
 	wstr_t logMessage = CLOCK.nowTimeWithMilliSec();
-	threadId_t threadId = GET_CURRENT_THREAD_ID();
+	std::thread::id threadId = GET_CURRENT_THREAD_ID();
 
 	logMessage += L"\t";
 

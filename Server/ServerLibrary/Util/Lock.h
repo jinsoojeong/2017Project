@@ -7,7 +7,7 @@ private:
 	lock_t          mutex_;
 	wstr_t			name_;
 	size_t          lockId_;
-	threadId_t		threadId_;
+	std::thread::id		threadId_;
 
 	wstr_t			lockingFile_;
 	int				lockingLine_;
@@ -23,8 +23,8 @@ public:
 	void lock(LPCWSTR fileName, int lineNo);
 	void unlock();
 
-	void setThreadId(threadId_t id);
-	threadId_t threadId();
+	void setThreadId(std::thread::id id);
+	std::thread::id threadId();
 };
 
 class LockSafeScope

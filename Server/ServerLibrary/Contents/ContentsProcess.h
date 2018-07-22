@@ -22,21 +22,22 @@ public:
 	static void Packet_Notify_Terminal(Session *session, Packet *rowPacket);
 	static void C_REQ_EXIT(Session *session, Packet *rowPacket);
 
+	virtual void Update() = 0;
+	void TryPopMsgCmd();
+
 protected:
 	typedef std::function<void(Session *session, Packet *rowPacket)> RunFunc;
 	unordered_map<PacketType, RunFunc> runFuncTable_;
 
-	virtual void Update() = 0;
-
 private:
-	
-	void initialize(xml_t *config);
+	friend class Server;
+
+	bool Run();
 	void registDefaultPacketFunc();
 	void MsgHandler(Package *package);
-	void TryPopMsgCmd();
 
 	void process();
 
-	array<Thread *, MAX_PACKET_THREAD_> threadPool_;
+	Thread* content_main_thread;
 	ThreadJobQueue<Package *> *msg_queue_;
 };

@@ -9,8 +9,6 @@ typedef DWORD					oid_t;
 typedef int32_t					packet_size_t;
 
 typedef std::time_t				tick_t;
-typedef std::thread				thread_t;
-typedef std::thread::id			threadId_t;
 
 typedef std::recursive_mutex	lock_t;
 

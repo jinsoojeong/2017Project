@@ -160,7 +160,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server\ContentProcess.h" />
+    <ClInclude Include="ContentServer.h" />
     <ClInclude Include="Server\User.h" />
     <ClInclude Include="Server\UserManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -168,7 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentServer.cpp" />
-    <ClCompile Include="Server\ContentProcess.cpp" />
     <ClCompile Include="Server\User.cpp" />
     <ClCompile Include="Server\UserManager.cpp" />
     <ClCompile Include="stdafx.cpp">

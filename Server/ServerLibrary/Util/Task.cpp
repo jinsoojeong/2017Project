@@ -21,22 +21,25 @@ void TaskNode::nextTick()
 
 bool TaskNode::expired()
 {
-	if (workObject_ == nullptr) {
+	if (workObject_ == nullptr)
 		return true;
-	}
-	if (durationSec_ != TICK_INFINTY) {
-		if (durationSec_ < NOW_TICK()) {
+	
+	if (durationSec_ != TICK_INFINTY) 
+	{
+		if (durationSec_ < NOW_TICK())
 			return true;
-		}
 	}
+
 	return false;
 }
 
 void TaskNode::tick()
 {
-	if (nextTick_ < NOW_TICK()) {
+	if (nextTick_ < NOW_TICK()) 
+	{
 		workObject_->tick();
-		this->nextTick();
+
+		nextTick();
 	}
 }
 
@@ -48,9 +51,8 @@ Task::Task(int id)
 
 Task::~Task()
 {
-	for (auto node : taskList_) {
+	for (auto node : taskList_)
 		SAFE_DELETE(node);
-	}
 }
 
 void Task::add(TaskNode *taskNode)
@@ -100,6 +102,10 @@ TaskManager::TaskManager()
 	initialize(&config);
 }
 
+TaskManager::~TaskManager()
+{
+}
+
 void TaskManager::initialize(xml_t *config)
 {
 	xmlNode_t *root = config->FirstChildElement("App")->FirstChildElement("Task");
@@ -117,15 +123,12 @@ void TaskManager::initialize(xml_t *config)
 		taskPool_.push_back(task);
 		task->run();
 	}
-
-	Log(L"* task thread, [%d] maked", threadCount_);
 }
 
-TaskManager::~TaskManager()
+void TaskManager::Finalize()
 {
-	for (auto task : taskPool_) {
+	for each (Task* task in taskPool_)
 		SAFE_DELETE(task);
-	}
 }
 
 void TaskManager::add(WorkObject *workObject, int freqSec, int durationSec)

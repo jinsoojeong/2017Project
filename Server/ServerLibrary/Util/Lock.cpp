@@ -53,12 +53,12 @@ void Lock::unlock()
 	lockingLine_ = INVALID_LINE;
 }
 
-void Lock::setThreadId(threadId_t id)
+void Lock::setThreadId(std::thread::id id)
 {
 	threadId_ = id;
 }
 
-threadId_t Lock::threadId()
+std::thread::id Lock::threadId()
 {
 	return threadId_;
 }

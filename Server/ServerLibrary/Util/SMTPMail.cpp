@@ -17,7 +17,8 @@ void smtpWriteLine(SOCKET sock, const char *str, const char *arg)
 bool connectSMTP(SOCKET *sock)
 {
 	*sock = ::socket(AF_INET, SOCK_STREAM, 0);
-	if (*sock == SOCKET_ERROR) {
+	if (*sock == SOCKET_ERROR) 
+	{
 		Log(L"! mail socket make fail");
 		return false;
 	}
