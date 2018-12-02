@@ -19,7 +19,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	// DB 매니저 초기화
 	DB_MANAGER.run();
 
-	shared_ptr<Thread> serverThread(new Thread(new thread_t(serverProcess), L"DBAgent"));
+	shared_ptr<Thread> serverThread(new Thread(new std::thread(serverProcess), L"DBAgent"));
 	return 0;
 }
 

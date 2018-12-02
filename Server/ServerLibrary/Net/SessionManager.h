@@ -19,7 +19,7 @@ public:
 	bool closeSession(Session *session);
 	void forceCloseSession(Session *session);
 
-	Session* Find(DWORD id);
+	Session* Find(UINT64 id);
 
     void runCommand(wstr_t cmd);
     void commandFuncInitialize();

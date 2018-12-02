@@ -18,7 +18,7 @@ enum
 class Session
 {
 public:
-    Session(DWORD id);
+    Session(UINT64 id);
     virtual ~Session();
 
 	virtual bool onAccept(SOCKET socket, SOCKADDR_IN addrInfo);
@@ -34,7 +34,7 @@ public:
 	SOCKET& socket();
     wstr_t clientAddress();
 
-	DWORD GetID() const { return id_; }
+	UINT64 GetID() const { return id_; }
 
 	BYTE GetType() { return type_; }
 	void SetType(BYTE type) { type_ = type; };
@@ -47,7 +47,7 @@ protected:
 	SOCKET_DATA socket_data_;
 
 private:
-	DWORD id_;
+	UINT64 id_;
 	BYTE type_;
 	tick_t last_heart_beat_;
 };

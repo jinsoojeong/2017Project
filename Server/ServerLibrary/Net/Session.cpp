@@ -2,7 +2,7 @@
 #include "Session.h"
 #include "./Iocp/IOCPServer.h"
 
-Session::Session(DWORD id) : id_(id)
+Session::Session(UINT64 id) : id_(id)
 {
 	type_ = SESSION_TYPE_CLIENT;
 	updateHeartBeat();

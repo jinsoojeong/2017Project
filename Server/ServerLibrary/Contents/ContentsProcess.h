@@ -22,7 +22,7 @@ public:
 	static void Packet_Notify_Terminal(Session *session, Packet *rowPacket);
 	static void C_REQ_EXIT(Session *session, Packet *rowPacket);
 
-	virtual void Update() = 0;
+	virtual void Update() {};
 	void TryPopMsgCmd();
 
 protected:

@@ -28,7 +28,7 @@ void ServerProcess()
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	shared_ptr<Thread> server_main_thread(new Thread(new thread_t(ServerProcess), L"Server"));
+	shared_ptr<Thread> server_main_thread(new Thread(new std::thread(ServerProcess), L"Server"));
 
 	return 0;
 }

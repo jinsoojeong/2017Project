@@ -69,9 +69,9 @@ bool SessionManager::closeSession(Session *session)
 void SessionManager::forceCloseSession(Session *session)
 {
 	SAFE_LOCK(lock_);
-	if (!session) {
+
+	if (!session)
 		return;
-	}
 
 	//우아한 종료 유도. 원래는 클라이언트에서 서버 접속을 종료하도록 유도해야 한다.
 	LINGER linger;
@@ -82,7 +82,7 @@ void SessionManager::forceCloseSession(Session *session)
 	this->closeSession(session);
 }
 
-Session* SessionManager::Find(DWORD id)
+Session* SessionManager::Find(UINT64 id)
 {
 	SAFE_LOCK(lock_);
 	Session *findSession = nullptr;

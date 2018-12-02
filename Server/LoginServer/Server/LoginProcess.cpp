@@ -20,7 +20,7 @@ void LoginProcess::C_REQ_ID_PW(Session *session, Packet *packet)
 	PK_C_REQ_ID_PW *msg = (PK_C_REQ_ID_PW *)packet;
 
 	PK_I_DB_REQ_ID_PW dbPacket;
-	dbPacket.clientId_ = (UInt64)session->id();
+	dbPacket.clientId_ = (UInt64)session->GetID();
 	dbPacket.id_ = msg->id_;
 	dbPacket.password_ = msg->password_;
 
@@ -33,7 +33,7 @@ void LoginProcess::I_DB_ANS_ID_PW(Session *session, Packet *rowPacket)
 	PK_I_DB_ANS_ID_PW *packet = (PK_I_DB_ANS_ID_PW  *)rowPacket;
 	Log(L"* id/ pw result = %d", packet->result_);
 
-	Session *clientSession = SESSION_MANAGER.session(packet->clientId_);
+	Session *clientSession = SESSION_MANAGER.Find(packet->clientId_);
 	if (clientSession == nullptr)
 		return;
 
@@ -69,7 +69,7 @@ void LoginProcess::I_LOGIN_NOTIFY_ID_LOADED(Session *session, Packet *rowPacket)
 	if (packet->result_ == dataNull)
 		return;
 	
-	Session *clientSession = SESSION_MANAGER.session(packet->clientId_);
+	Session *clientSession = SESSION_MANAGER.Find(packet->clientId_);
 	if (clientSession == nullptr) {
 		return;
 	}
