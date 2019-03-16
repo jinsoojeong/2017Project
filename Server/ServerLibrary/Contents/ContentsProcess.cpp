@@ -18,6 +18,7 @@ ContentsProcess::~ContentsProcess()
 
 bool ContentsProcess::Run()
 {
+	// main update tick
 	content_main_thread = MAKE_THREAD(ContentsProcess, process);
 
 	if (content_main_thread == nullptr)
@@ -40,13 +41,13 @@ void ContentsProcess::putPackage(Package *package)
 
 void ContentsProcess::MsgHandler(Package *package)
 {
-	PacketType type = package->packet_->type();
+	PacketType type = package->GetPacket()->type();
 
 	auto itr = runFuncTable_.find(type);
 	if (itr == runFuncTable_.end()) 
 	{
 		Log(L"! invaild packet runFunction. type[%d]", type);
-		package->session_->onClose();
+		package->GetSession()->onClose();
 		return;
 	}
 
@@ -56,7 +57,7 @@ void ContentsProcess::MsgHandler(Package *package)
 	Log(L"*** [%d] packet run ***", type);
 #endif //_DEBUG
 
-	runFunction(package->session_, package->packet_);
+	runFunction(package->GetSession(), package->GetPacket());
 }
 
 void ContentsProcess::TryPopMsgCmd()
@@ -68,7 +69,6 @@ void ContentsProcess::TryPopMsgCmd()
 		MsgHandler(msg);
 		SAFE_DELETE(msg);
 	}
-
 }
 
 void ContentsProcess::process()
@@ -77,6 +77,8 @@ void ContentsProcess::process()
 	{
 		TryPopMsgCmd();
 		Update();
+
+		CONTEXT_SWITCH;
 	}
 }
 

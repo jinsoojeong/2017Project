@@ -93,12 +93,12 @@ wstr_t Session::clientAddress()
 	return stringData;
 }
 
-tick_t Session::heartBeat()
+std::time_t Session::heartBeat()
 {
 	return last_heart_beat_;
 }
 
 void Session::updateHeartBeat()
 {
-	last_heart_beat_ = CLOCK.systemTick();
+	last_heart_beat_ = JS_CLOCK.GetCurrentTick();
 }

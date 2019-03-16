@@ -22,14 +22,14 @@ void SessionMonitor::tick()
 	//15초간 반응 없으면 끊기
 	const int MAX_HEART_BEAT = 15 * 1000;
 	auto list = SESSION_MANAGER.sessionList();
-	tick_t now = CLOCK.systemTick();
+	std::time_t now = JS_CLOCK.GetCurrentTick();
 
 	for (auto session : list) 
 	{
 		if (session->GetType() != SESSION_TYPE_CLIENT)
 			continue;
 
-		tick_t lastTick = session->heartBeat();
+		std::time_t lastTick = session->heartBeat();
 
 		if (now - lastTick > MAX_HEART_BEAT) 
 		{

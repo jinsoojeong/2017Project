@@ -3,25 +3,28 @@
 #include "QueryStatement.h"
 #include "DBManager.h"
 
-ADODatabase::ADODatabase()
+ADODatabase::ADODatabase(std::wstring process_name) : process_name_(process_name)
 {
 	::CoInitialize(NULL);
-    state_ = DB_STOP;
+    state_ = DB_WAIT;
 
 	dbConnection_.CreateInstance(__uuidof(ADODB::Connection));
-	if (dbConnection_ == NULL) {
+	if (dbConnection_ == NULL) 
+	{
 		ErrorLog(L"! Database init fail");
 	}
+
     const int TIME_OUT = 30;
-    this->setConnectTimeOut(TIME_OUT);
+    setConnectTimeOut(TIME_OUT);
 }
 
 ADODatabase::~ADODatabase()
 {
-    this->disconnect();
-    if (dbConnection_) {
+    Disconnect();
+
+    if (dbConnection_)
         dbConnection_.Release();
-    }
+    
 	SAFE_DELETE(thread_);
 	::CoUninitialize();
 }
@@ -39,7 +42,7 @@ void ADODatabase::comError(const WCHAR *actionName, _com_error &e)
     Log(L"! [%s]DB [%s] fail [%s]", dbName_.c_str(), actionName, (WCHAR *)e.Description());
 }
 
-bool ADODatabase::connect()
+bool ADODatabase::Connect()
 {
 	if (!dbConnection_) {
 		return false;
@@ -50,7 +53,7 @@ bool ADODatabase::connect()
 		if (SUCCEEDED(hr)) {
 			dbConnection_->PutCursorLocation(ADODB::adUseClient);
 			Log(L"* [%s]DB connection success", dbName_.c_str());
-			state_ = DB_STANDBY;
+			state_ = DB_READY;
 			return true;
 		}
 	}
@@ -61,17 +64,17 @@ bool ADODatabase::connect()
 	return false;
 }
 
-bool ADODatabase::connect(const WCHAR *provider, const WCHAR *serverName, const WCHAR *dbName, const WCHAR *id, const WCHAR *password)
+bool ADODatabase::Connect(const WCHAR *provider, const WCHAR *serverName, const WCHAR *dbName, const WCHAR *id, const WCHAR *password)
 {
 	array<WCHAR, SIZE_128> buffer;
 	snwprintf(buffer, L"Provider=%s;Server=%s;Database=%s;Uid=%s;Pwd=%s;", provider, serverName, dbName, id, password);
     connectionStr_ = buffer.data();
     Log(L"* [%s]DB try connection provider = %s", dbName_.c_str(), provider);
 
-	return this->connect();
+	return this->Connect();
 }
 
-bool ADODatabase::connect(const WCHAR *serverName, const WCHAR *dbName, const WCHAR *id, const WCHAR *password)
+bool ADODatabase::Connect(const WCHAR *serverName, const WCHAR *dbName, const WCHAR *id, const WCHAR *password)
 {
     dbName_ = dbName;
 	Log(L"* connect try: %s, %s, %s", dbName, id, password);
@@ -79,7 +82,7 @@ bool ADODatabase::connect(const WCHAR *serverName, const WCHAR *dbName, const WC
 	for (int index = 10; index < 20; ++index) {
 		array<WCHAR, SIZE_64> mssqlName;
 		snwprintf(mssqlName, L"SQLNCLI%d", index);
-		if (this->connect(mssqlName.data(), serverName, dbName, id, password)) 
+		if (this->Connect(mssqlName.data(), serverName, dbName, id, password)) 
 		{
 			Log(L"* database %s : %s connect", mssqlName, dbName);
 			return true;
@@ -87,7 +90,7 @@ bool ADODatabase::connect(const WCHAR *serverName, const WCHAR *dbName, const WC
 	}
 
 	//mssql 2005, 2008로 접속시
-	if (this->connect(L"SQLNCLI", serverName, dbName, id, password)) 
+	if (this->Connect(L"SQLNCLI", serverName, dbName, id, password)) 
 	{
 		Log(L"* database SQLNCLI : %s connect",  dbName);
 		return true;
@@ -96,17 +99,17 @@ bool ADODatabase::connect(const WCHAR *serverName, const WCHAR *dbName, const WC
 	return false;
 }
 
-bool ADODatabase::connected()
+bool ADODatabase::Connected()
 {
     return dbConnection_->State != ADODB::adStateClosed ? true : false;
 }
 
-bool ADODatabase::disconnect()
+bool ADODatabase::Disconnect()
 {
 	if (!dbConnection_) {
 		return false;
 	}
-    if (state_ == DB_STOP) {
+    if (state_ == DB_WAIT) {
         return true;
     }
 	try {
@@ -116,7 +119,7 @@ bool ADODatabase::disconnect()
             return true;
         }
 		dbConnection_->Close();
-        state_ = DB_STOP;
+        state_ = DB_WAIT;
 
         connectionStr_.clear();
         dbName_.clear();
@@ -130,17 +133,19 @@ bool ADODatabase::disconnect()
 
 void ADODatabase::execute()
 {
-	if (DB_MANAGER.runQueryCount() == 0)
+	DWORD run_count = 0;
+	if (DB_MANAGER.RunCount(process_name_, run_count) == false || run_count == 0)
 		return;
 
 	Query *query = nullptr;
-	if (DB_MANAGER.popQuery(&query) == false) {
+	if (DB_MANAGER.Dequeue(process_name_, &query) == false)
 		return;
-	}
+	
 	QueryStatement *statement = query->statement();
 
 	const WCHAR *sqlQuery = statement->query();
-	try {
+	try 
+	{
 		state_ = DB_RUNNING;
 		QueryRecord record;
 
@@ -163,24 +168,31 @@ void ADODatabase::execute()
 			break;
 		}
 
-		if (record.isEof()) {
+		if (record.isEof()) 
+		{
 			int quertResultVal = atol((char*)((_bstr_t)resultVal));
 			
-			if (quertResultVal < 1) {
+			if (quertResultVal < 1)
+			{
 				Log(L"* query : [%s] have error code [%d] ", sqlQuery, quertResultVal);
 			}
-			else {
+			else
 				record.setResultVal(quertResultVal);
-			}
 		}
 		
 		query->result() = record;
-		state_ = DB_STANDBY;
+		state_ = DB_READY;
+
+		if (query->result().resultVal() == 0)
+			query->Commit();
+		else
+			query->Rollback();
 
 		Log(L"* Run query [%s] result [%d]", sqlQuery, record.resultVal());
 	}
-	catch (_com_error &e) {
-		this->comError(L"execute", e);
+	catch (_com_error &e) 
+	{
+		comError(L"execute", e);
 	}
 
 	SAFE_DELETE(query);
@@ -190,7 +202,7 @@ void ADODatabase::process()
 {
     while (_shutdown == false) 
 	{
-		if (!this->connected()) 
+		if (!this->Connected()) 
 		{
 			Log(L"! db[%s] connection disconnect", dbName_.c_str());
 			ASSERT(FALSE);
@@ -201,7 +213,7 @@ void ADODatabase::process()
     }
 }
 
-void ADODatabase::run()
+void ADODatabase::Run()
 {
 	thread_ = MAKE_THREAD(ADODatabase, process);
 }

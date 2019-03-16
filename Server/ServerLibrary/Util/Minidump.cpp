@@ -21,8 +21,10 @@ LONG WINAPI MiniDump::execptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
 		return 0;
     }
 
-    wstr_t dumpPatch;
-    dumpPatch += NOW_STRING(L"D%Y-%m-%dT%H-%M-%S");
+	TimeStamp time_stamp = JS_CLOCK.GetToday();
+
+    std::wstring dumpPatch;
+    dumpPatch += time_stamp.ToString();
     dumpPatch += L".dmp";
 
     HANDLE file = ::CreateFile(dumpPatch.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);

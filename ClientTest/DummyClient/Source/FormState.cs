@@ -8,7 +8,8 @@ namespace DummyClient
         protected Form form_;
         protected Network network_;
 
-        public abstract void open(string ip, uint port);
+        public abstract void open();
+        public abstract bool connect(string ip, uint port);
 
         protected void setForm()
         {
@@ -47,41 +48,50 @@ namespace DummyClient
 
     internal class LoginFormState : FormState
     {
-        //HACK : 이곳 매직코드는 처음 접속하는
-        //       로그인 서버 ip랑 port 번호임
-        private string loginIp_ = "127.0.0.1";
-        private uint loginPort_ = 9000;
-
-        public override void open(string ip, uint port)
+        public override void open()
         {
             form_ = new LoginForm();
             setForm();
-            if (!base.connectToServer(loginIp_, loginPort_)) {
+        }
+
+        public override bool connect(string ip, uint port)
+        {
+            if (!base.connectToServer(ip, port))
+            {
                 var result = MessageBox.Show("로그인 서버 연결에 실패. 다시 연결 시도 해볼까요?", "error", MessageBoxButtons.RetryCancel);
-                if (result != DialogResult.Retry) {
+                if (result != DialogResult.Retry)
+                {
                     form_.Close();
-                    Application.Exit();
+                    //Application.Exit();
                 }
+
+                return false;
             }
             network_.setPacketProcess(new LoginPacketProcess());
+
+            return true;
         }
     }
 
     internal class LobbyFormState : FormState
     {
-        public override void open(string ip, uint port)
+        public override void open()
         {
             form_ = new LobbyForm();
             setForm();
+        }
 
+        public override bool connect(string ip, uint port)
+        {
             if (!base.connectToServer(ip, port))
             {
                 MessageBox.Show("채팅 서버 연결에 실패 했습니다..", "error", MessageBoxButtons.OK);
-                Program.programState_.setState(PROGRAM_STATE.LOGIN, null, 0);
-
+                Program.programState_.setState(PROGRAM_STATE.LOGIN);
+                return false;
             }
 
             network_.setPacketProcess(new LobbyPacketProcess());
+            return true;
         }
     }
 }

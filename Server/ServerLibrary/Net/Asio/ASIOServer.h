@@ -7,7 +7,6 @@
 #include <boost/thread.hpp>
 #include "../Server.h"
 
-using namespace std;
 using namespace boost;
 using namespace boost::asio;
 

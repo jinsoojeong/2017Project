@@ -34,8 +34,12 @@ LogFile::~LogFile()
     }
 
     //뒤에 로그파일이 붙으면 종료시, 종료시각을 파일이름 뒤에 붙여줍니다.
-    wstr_t closeFileName = fileName_.substr(0, found);
-    closeFileName += CLOCK.nowTime(L"_%Y%m%d-%H%M%S.log");
+	TimeStamp time_stamp = JS_CLOCK.GetToday();
+
+    std::wstring closeFileName = fileName_.substr(0, found);
+	closeFileName += time_stamp.ToString();
+	closeFileName += L".log";
+
     _wrename(fileName_.c_str(), closeFileName.c_str());
 }
 
@@ -92,7 +96,7 @@ LogBase *LogWriter::logger()
     return base_;
 }
 
-void LogWriter::log(WCHAR *fmt, ...)
+void LogWriter::log(const WCHAR *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -102,9 +106,9 @@ void LogWriter::log(WCHAR *fmt, ...)
 	va_end(args);
 }
 
-void LogWriter::log(WCHAR *fmt, va_list args)
+void LogWriter::log(const WCHAR *fmt, va_list args)
 {
-	wstr_t logMessage = CLOCK.nowTimeWithMilliSec();
+	wstr_t logMessage = JS_CLOCK.GetNowMilliSec();
 	std::thread::id threadId = GET_CURRENT_THREAD_ID();
 
 	logMessage += L"\t";
@@ -178,7 +182,7 @@ void SystemLog::initialize(xml_t *config)
 	logWrite_.setLogger(base, prefix.c_str());
 }
 
-void SystemLog::log(WCHAR *fmt, ...)
+void SystemLog::log(const WCHAR *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);

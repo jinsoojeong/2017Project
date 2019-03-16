@@ -4,14 +4,17 @@
 #include "stdafx.h"
 #include "DBAgentProcess.h"
 
-void serverProcess()
+bool ServerProcess()
 {
-	shared_ptr<Server> server(new IOCPServer(new DBAgentProcess()));
+	Server* server = new IOCPServer(new DBAgentProcess());
 	//std::shared_ptr<Server> server(new ServerASIO(2000));
-	if (!server->run()) {
+	if (!server->run()) 
+	{
 		Log(L"! error: server start fail");
-		return;
+		return false;
 	}
+
+	return true;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -19,7 +22,24 @@ int _tmain(int argc, _TCHAR* argv[])
 	// DB 매니저 초기화
 	DB_MANAGER.run();
 
-	shared_ptr<Thread> serverThread(new Thread(new std::thread(serverProcess), L"DBAgent"));
+	if (ServerProcess() == false)
+	{
+		_shutdown = true;
+		return -1;
+	}
+
+	while (true)
+	{
+		std::wstring cmd;
+		std::getline(std::wcin, cmd);
+
+		if (cmd.compare(L"x"))
+			continue;
+
+		_shutdown = true;
+		break;
+	}
+
 	return 0;
 }
 

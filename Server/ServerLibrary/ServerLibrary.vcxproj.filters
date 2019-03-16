@@ -15,17 +15,8 @@
     <ClCompile Include="Net\Iocp\IOCPSession.cpp">
       <Filter>Network\IOCP</Filter>
     </ClCompile>
-    <ClCompile Include="Net\Asio\ASIOServer.cpp">
-      <Filter>Network\ASIO</Filter>
-    </ClCompile>
-    <ClCompile Include="Net\Asio\ASIOSession.cpp">
-      <Filter>Network\ASIO</Filter>
-    </ClCompile>
     <ClCompile Include="Util\Assert.cpp">
       <Filter>Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Clock.cpp">
-      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Util\Config.cpp">
       <Filter>Utility</Filter>
@@ -105,6 +96,15 @@
     <ClCompile Include="Util\SMTPMail.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="ClientNet.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Clock.cpp">
+      <Filter>Utility\Clock</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\TimeStamp.cpp">
+      <Filter>Utility\Clock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ServerLibrary.h" />
@@ -125,17 +125,8 @@
     <ClInclude Include="Net\Iocp\IOCPSession.h">
       <Filter>Network\IOCP</Filter>
     </ClInclude>
-    <ClInclude Include="Net\Asio\ASIOSession.h">
-      <Filter>Network\ASIO</Filter>
-    </ClInclude>
-    <ClInclude Include="Net\Asio\ASIOServer.h">
-      <Filter>Network\ASIO</Filter>
-    </ClInclude>
     <ClInclude Include="Util\Assert.h">
       <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Clock.h">
-      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Util\Config.h">
       <Filter>Utility</Filter>
@@ -255,6 +246,21 @@
     <ClInclude Include="Net\WinSocket.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="ClientNet.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Clock.h">
+      <Filter>Utility\Clock</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TimeStamp.h">
+      <Filter>Utility\Clock</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TimerJob.h">
+      <Filter>Utility\Clock</Filter>
+    </ClInclude>
+    <ClInclude Include="SchedulerJob.h">
+      <Filter>Utility\Clock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -265,9 +271,6 @@
     </Filter>
     <Filter Include="Network\IOCP">
       <UniqueIdentifier>{892ddc58-a807-49c2-8224-3425aa65c0f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Network\ASIO">
-      <UniqueIdentifier>{4b5c0340-8e72-44f6-b2d4-cb8008b3984a}</UniqueIdentifier>
     </Filter>
     <Filter Include="ADODatabase">
       <UniqueIdentifier>{56052ee3-121c-40b9-8f88-41fccb9df2d2}</UniqueIdentifier>
@@ -295,6 +298,9 @@
     </Filter>
     <Filter Include="Utility\Thread">
       <UniqueIdentifier>{df8087f0-a7f2-4d06-ab28-a3ed565d57c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Clock">
+      <UniqueIdentifier>{2f3a2040-8b2a-40a2-a164-382454fc0d1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@
 
 const int INVALID_LINE = -1;
 
-Lock::Lock(WCHAR *name)
+Lock::Lock(const WCHAR *name)
 {
 	lockId_ = LockManager::GetSingleton().generalId();
 	name_ = name;
@@ -133,7 +133,9 @@ Lock* LockManager::searchLockCycle(Lock *newLock)
 	trace.push_back(newLock);
 
 	Lock *deadLock = nullptr;
-	while (true) {
+
+	while (true) 
+	{
 		Lock *threadLock = thread->lock();
 		if (threadLock == nullptr) {
 			break;
@@ -147,7 +149,10 @@ Lock* LockManager::searchLockCycle(Lock *newLock)
 		if (!thread) {
 			break;
 		}
+
+		Sleep(1000);
 	}
+
 	trace.empty();
 	return deadLock;
 }

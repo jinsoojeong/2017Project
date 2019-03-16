@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LoginProcess.h"
+#include "QI_DB_REQ_ID_PW.h"
 
 LoginProcess::LoginProcess()
 {
@@ -24,8 +25,17 @@ void LoginProcess::C_REQ_ID_PW(Session *session, Packet *packet)
 	dbPacket.id_ = msg->id_;
 	dbPacket.password_ = msg->password_;
 
-	Terminal *terminal = TERMINAL_MANAGER.get(L"DBAgent");
-	terminal->sendPacket(&dbPacket);
+	QI_DB_REQ_ID_PW *query = new QI_DB_REQ_ID_PW();	        			// 쿼리 만들기
+	query->clientId_ = (UInt64)session->GetID();
+
+	QueryStatement *statement = query->statement();
+	statement->addParam((char *)msg->id_.c_str());					// 파라메터 계속 붙여나가기
+	statement->addParam((char *)msg->password_.c_str());
+
+	DB_MANAGER.Enqueue(L"DBProcess", query);
+
+	//Terminal *terminal = TERMINAL_MANAGER.get(L"DBAgent");
+	//terminal->sendPacket(&dbPacket);
 }
 
 void LoginProcess::I_DB_ANS_ID_PW(Session *session, Packet *rowPacket)

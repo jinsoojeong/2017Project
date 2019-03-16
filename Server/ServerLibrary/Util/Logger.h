@@ -54,8 +54,8 @@ public:
     void setLogger(LogBase *base, const WCHAR *logPrefix);
     LogBase *logger();
 
-    void log(WCHAR *fmt, ...);
-	void log(WCHAR *fmt, va_list args);
+    void log(const WCHAR *fmt, ...);
+	void log(const WCHAR *fmt, va_list args);
 };
 typedef LogWriter* LogWriterPtr;
 
@@ -71,5 +71,5 @@ public:
     virtual ~SystemLog();
 	
 	void initialize(xml_t *config);
-	void log(WCHAR *fmt, ...);
+	void log(const WCHAR *fmt, ...);
 };

@@ -31,5 +31,29 @@ namespace DummyClient
             this.Dispose();
             Application.Exit();
         }
+
+        private void button_connect__Click(object sender, EventArgs e)
+        {
+            string ip = "127.0.0.1";
+            uint port = 9000;
+
+            Program.programState_.connect(ip, port);
+        }
+
+        private void button_connect_login_skip__Click(object sender, EventArgs e)
+        {
+            string ip = "127.0.0.1";
+            uint port = 9200;
+
+            Program.programState_.setState(PROGRAM_STATE.LOBBY);
+            Program.programState_.setName("test");
+
+            if (Program.programState_.connect(ip, port))
+            { 
+                PK_C_REQ_REGIST_CHATTING_NAME rPacket = new PK_C_REQ_REGIST_CHATTING_NAME();
+                rPacket.name_ = "test";
+                Program.programState_.sendPacket(rPacket);
+            }
+        }
     }
 }

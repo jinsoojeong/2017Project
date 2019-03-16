@@ -33,14 +33,14 @@ namespace DummyClient
             }
         }
 
-        public void setState(PROGRAM_STATE state, string ip, uint port)
+        public void setState(PROGRAM_STATE state)
         {
             if (formState_ != null)
                 formState_.close();
 
             state_ = state;
             this.changeState();
-            formState_.open(ip, port);
+            formState_.open();
         }
 
         public void setName(string name)
@@ -51,6 +51,11 @@ namespace DummyClient
         public string name()
         {
             return name_;
+        }
+
+        public bool connect(string ip, uint port)
+        {
+            return this.formState_.connect(ip, port);
         }
 
         public void sendPacket(PacketInterface packet)

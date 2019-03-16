@@ -167,6 +167,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClientNet.h" />
     <ClInclude Include="Contents\ContentsProcess.h" />
     <ClInclude Include="Database\ADODatabase.h" />
     <ClInclude Include="Database\Database.h" />
@@ -174,8 +175,6 @@
     <ClInclude Include="Database\Query.h" />
     <ClInclude Include="Database\QueryRecord.h" />
     <ClInclude Include="Database\QueryStatement.h" />
-    <ClInclude Include="Net\Asio\ASIOServer.h" />
-    <ClInclude Include="Net\Asio\ASIOSession.h" />
     <ClInclude Include="Net\Iocp\IOCPServer.h" />
     <ClInclude Include="Net\Iocp\IOCPSession.h" />
     <ClInclude Include="Net\Packet\Package.h" />
@@ -193,6 +192,7 @@
     <ClInclude Include="Net\Terminal\TerminalManager.h" />
     <ClInclude Include="Net\Terminal\TerminalSession.h" />
     <ClInclude Include="Net\WinSocket.h" />
+    <ClInclude Include="SchedulerJob.h" />
     <ClInclude Include="ServerLibrary.h" />
     <ClInclude Include="Shutdown.h" />
     <ClInclude Include="stdafx.h" />
@@ -215,20 +215,21 @@
     <ClInclude Include="Util\Task.h" />
     <ClInclude Include="Util\Thread.h" />
     <ClInclude Include="Util\ThreadJobQueue.h" />
+    <ClInclude Include="Util\TimerJob.h" />
+    <ClInclude Include="Util\TimeStamp.h" />
     <ClInclude Include="Util\tinyXml\tinystr.h" />
     <ClInclude Include="Util\tinyXml\tinyxml.h" />
     <ClInclude Include="Util\Type.h" />
     <ClInclude Include="Util\Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClientNet.cpp" />
     <ClCompile Include="Contents\ContentsProcess.cpp" />
     <ClCompile Include="Database\ADODatabase.cpp" />
     <ClCompile Include="Database\DBManager.cpp" />
     <ClCompile Include="Database\Query.cpp" />
     <ClCompile Include="Database\QueryRecord.cpp" />
     <ClCompile Include="Database\QueryStatement.cpp" />
-    <ClCompile Include="Net\Asio\ASIOServer.cpp" />
-    <ClCompile Include="Net\Asio\ASIOSession.cpp" />
     <ClCompile Include="Net\Iocp\IOCPServer.cpp" />
     <ClCompile Include="Net\Iocp\IOCPSession.cpp" />
     <ClCompile Include="Net\Packet\PacketAnalyzer.cpp" />
@@ -258,6 +259,7 @@
     <ClCompile Include="Util\SMTPMail.cpp" />
     <ClCompile Include="Util\Task.cpp" />
     <ClCompile Include="Util\Thread.cpp" />
+    <ClCompile Include="Util\TimeStamp.cpp" />
     <ClCompile Include="Util\tinyXml\tinystr.cpp" />
     <ClCompile Include="Util\tinyXml\tinyxml.cpp" />
     <ClCompile Include="Util\tinyXml\tinyxmlerror.cpp" />

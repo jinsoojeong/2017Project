@@ -5,9 +5,6 @@ class Session;
 class Package
 {
 public:
-	Session *session_;
-	Packet *packet_;
-
 	Package(Session *session, Packet *packet)
 	{
 		session_ = session;
@@ -19,4 +16,11 @@ public:
 		session_ = nullptr;
 		SAFE_DELETE(packet_);
 	}
+
+	Session* GetSession() { return session_; }
+	Packet* GetPacket() { return packet_; }
+
+private:
+	Session *session_;
+	Packet *packet_;
 };

@@ -7,28 +7,63 @@
 #include "stdafx.h"
 #include "ADODatabase.h"
 
-class DBManager : public Singleton < DBManager >
+enum DBProcessThread
 {
-	int                                 workerCount_;
-	std::vector<Database *>             dbPool_;
+	SingleThread,	// only 1개의 스레드
+	OptimizeThread,	// cpu * 2 개의 스레드
+	ExpendThread	// 최초 cpu * 2개의 스레드, 모든 스레드 활동 중이라면 스레드 확장 최대 int_max
+};
 
-	wstr_t								serverName_;
-	wstr_t								dbName_;
-	wstr_t								login_;
-	wstr_t								password_;
-	ThreadJobQueue<Query *>				*queryPool_;
-
+class DBManager : public Singleton<DBManager>
+{
 public:
 	DBManager();
 	virtual ~DBManager();
 
-	void initialize(xml_t *config);
+	bool RegistDBProcess(std::wstring process_name, DBProcessThread db_process_thread);
+	bool Run(std::wstring process_name, std::wstring server_name, std::wstring db_name, std::wstring login_id, std::wstring password);
+	bool Enqueue(std::wstring process_name, Query *query);
+	void Finalize();
+	
+private:
+	friend class ADODatabase;
 
-	size_t runQueryCount();
-	void pushQuery(Query *query);
-	bool popQuery(Query **query);
+	struct DBProcess
+	{
+		DBProcess(std::wstring name, DBProcessThread type) : process_name(name), db_process_thread(type)
+		{
+		}
 
-	void run();
+		~DBProcess()
+		{
+			for (Database* db : database_list)
+			{
+				db->Disconnect();
+				SAFE_DELETE(db);
+			}
+		}
+
+		void Regist(Database* db)
+		{
+			database_list.push_back(db);
+		}
+
+		std::wstring process_name;
+		DBProcessThread db_process_thread;
+		std::list<Database *> database_list;
+	};
+
+	typedef ThreadJobQueue<Query *> QueryQueue;
+	typedef std::map<std::wstring, QueryQueue*> QueryPool;
+	typedef std::map<std::wstring, DBProcess*> DBPool;
+
+	QueryQueue* FindQueryQueue(std::wstring process_name);
+	DBProcess* FindDBProcess(std::wstring process_name);
+	bool Dequeue(std::wstring process_name, Query **query);
+	bool RunCount(std::wstring process_name, DWORD& size __out);
+
+	DBPool db_pool_by_process_;
+	QueryPool query_pool_by_process_;
 };
 
 #define DB_MANAGER DBManager::GetSingleton()

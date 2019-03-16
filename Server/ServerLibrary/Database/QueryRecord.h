@@ -31,11 +31,11 @@ public:
 	HRESULT		moveFirst();
 	HRESULT		moveLast();
 
-	bool		get(char* fieldName, char* fieldValue);
-	bool		get(char* fieldName, wchar_t* fieldValue);
-	bool		get(char* fieldName, int32_t& fieldValue);
-	bool		get(char* fieldName, int64_t& fieldValue);
-	bool		get(char* fieldName, float& fieldValue);
-	bool		get(char* fieldName, double& fieldValue);
-	bool		get(char* fieldName, long& fieldValue);
+	bool		get(const char* fieldName, char* fieldValue);
+	bool		get(const char* fieldName, wchar_t* fieldValue);
+	bool		get(const char* fieldName, int32_t& fieldValue);
+	bool		get(const char* fieldName, int64_t& fieldValue);
+	bool		get(const char* fieldName, float& fieldValue);
+	bool		get(const char* fieldName, double& fieldValue);
+	bool		get(const char* fieldName, long& fieldValue);
 };

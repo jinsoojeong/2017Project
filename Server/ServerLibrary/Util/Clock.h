@@ -1,64 +1,50 @@
 #pragma once
 #include "stdafx.h"
-#include <chrono>
-#include <ctime>
+#include "TimeStamp.h"
+#include "TimerJob.h"
+#include "SchedulerJob.h"
 
-#define CLOCK					Clock::GetSingleton()
-#define NOW_TICK				CLOCK.systemTick
-#define NOW_STRING				CLOCK.nowTime
-
-#define TICK_MIN                (60)
-#define TICK_HOUR               (TICK_MIN * 60)
-#define TICK_DAY                (TICK_HOUR * 24)
-
-#define TICK_TO_MIN(x)          (x / TICK_MIN)
-#define MIN_TO_TICK(x)          (x * TICK_MIN)
-
-#define TICK_TO_HOUR(x)         (x / TICK_HOUR)        
-#define HOUR_TO_TICK(x)         (x * TICK_HOUR)
-
-#define TICK_TO_DAY(x)          (x / TICK_DAY)
-#define DAY_TO_TICK(x)          (x * TICK_DAY)
-
-typedef enum {
-    DAY_SUNDAY      = 0,
-    DAY_MONDAY      = 1,        //¡ﬂ±πæÓ∑Œ ø˘ø‰¿œ¿∫ ‡¯—¢ÏÈ
-    DAY_TUESDAY     = 2,        //¡ﬂ±πæÓ∑Œ »≠ø‰¿œ¿∫ ‡¯—¢Ï£
-    DAY_WEDNESDAY   = 3,        //...
-    DAY_THURSDAY    = 4,
-    DAY_FRIDAY      = 5,
-    DAY_SATURDAY    = 6,
-}DayOfTheWeek;
-
-#define DATETIME_FORMAT         L"D%Y-%m-%dT%H:%M:%S"
-#define DATE_FORMAT             L"%Y-%m-%d"
-#define TIME_FORMAT             L"%H:%M:%S"
-#define DB_TIME_FORMAT          L"%4d-%2d-%2d %2d:%2d:%2d"
-
-using namespace std::chrono;
-using namespace std;
-typedef system_clock::time_point timePoint;
+#define JS_MINUTE (60)
+#define JS_HOUR (JS_MINUTE * 60)
+#define JS_DAY (JS_HOUR * 24)
 
 class Clock : public Singleton<Clock>
 {
-    tick_t	serverStartTick_;
-    
-    wstr_t	tickToStr(tick_t tick, WCHAR *fmt = DATETIME_FORMAT);
-
 public:
     Clock();
     ~Clock();
+	
+	void Update(ULONGLONG current_tick);
 
-    tick_t	serverStartTick();
-    tick_t	systemTick();
-    tick_t	strToTick(wstr_t str, WCHAR *fmt = DB_TIME_FORMAT);
-    
-    wstr_t	nowTime(WCHAR *fmt = DATETIME_FORMAT);
-    wstr_t	nowTimeWithMilliSec(WCHAR *fmt = DATETIME_FORMAT);
+	std::time_t	GetServerStatckTick() { return server_start_tick_; }
+	std::time_t	GetCurrentTick() { return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); }
+	std::wstring GetNowMilliSec();
+    TimeStamp GetToday(INT diff_day = 0);
+	DAY_WEEK GetTodayWeek();
 
-    wstr_t today();
-    wstr_t tomorrow();
-    wstr_t yesterday();
-    
-    DayOfTheWeek todayOfTheWeek();
+	inline BYTE TickToMinute(std::time_t tick) { return static_cast<BYTE>(tick / JS_MINUTE); }
+	inline BYTE TickToHour(std::time_t tick) { return static_cast<BYTE>(tick / JS_HOUR); }
+	inline BYTE TickToDay(std::time_t tick) { return static_cast<BYTE>(tick / JS_DAY); }
+	inline std::time_t MinuteToTick(BYTE minute) { return (minute * JS_MINUTE); }
+	inline std::time_t HourToTick(BYTE hour) { return (hour * JS_HOUR); }
+	inline std::time_t DayToTick(BYTE day) { return (day * JS_DAY); }
+
+	void RegistTimerJob(TimerJob* timer_job);
+	void RegistSchedulerJob(SchedulerJob* scheduler_job);
+
+private:
+	typedef std::list<TimerJob*> TimerJobs;
+	typedef std::list<SchedulerJob*> SchedulerJobs;
+
+	void ProcessTimerJob(const TimeStamp& current_time_stamp);
+	void ProcessSchedulerJob(const TimeStamp& current_time_stamp);
+
+	static ULONGLONG update_interval_;
+	std::time_t	server_start_tick_;
+	TimerJobs timer_jobs_;
+	SchedulerJobs activate_scheduler_jobs_;
+	SchedulerJobs wait_scheduler_jobs_;
+	ULONGLONG next_update_tick_;
 };
+
+#define JS_CLOCK Clock::GetSingleton()

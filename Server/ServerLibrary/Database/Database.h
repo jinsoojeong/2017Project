@@ -7,29 +7,25 @@
 
 typedef enum
 {
-    DB_STOP,                // 정지
-    DB_STANDBY,             // 쿼리 받을 준비
-    DB_RUNNING,             // 쿼리 실행중
+    DB_WAIT,
+    DB_READY,
+	DB_RUNNING,
 }DB_STATE;
 
 class Database
 {
-protected:
-    DB_STATE        state_;
-
 public:
-    Database()
-    {
-    }
-    virtual ~Database()
-    {
-    }
+    Database() {}
+	virtual ~Database() {}
 
-    virtual bool connect(const WCHAR *serverName, const WCHAR *dbName, const WCHAR *id, const WCHAR *password) = 0;
-    virtual bool connect() = 0;
-    virtual bool connected() = 0;
-    virtual bool disconnect() = 0;
+    virtual bool Connect(const WCHAR *serverName, const WCHAR *dbName, const WCHAR *id, const WCHAR *password) = 0;
+    virtual bool Connect() = 0;
+    virtual bool Connected() = 0;
+    virtual bool Disconnect() = 0;
 
-    virtual void run() = 0;
+    virtual void Run() = 0;
     DB_STATE &state() { return state_; }
+
+protected:
+	DB_STATE state_;
 };

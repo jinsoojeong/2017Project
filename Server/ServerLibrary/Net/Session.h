@@ -39,7 +39,7 @@ public:
 	BYTE GetType() { return type_; }
 	void SetType(BYTE type) { type_ = type; };
 
-	tick_t heartBeat();
+	std::time_t heartBeat();
 	void updateHeartBeat();
 
 protected:
@@ -49,5 +49,5 @@ protected:
 private:
 	UINT64 id_;
 	BYTE type_;
-	tick_t last_heart_beat_;
+	std::time_t last_heart_beat_;
 };

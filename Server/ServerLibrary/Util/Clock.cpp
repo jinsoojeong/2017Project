@@ -1,102 +1,157 @@
 #include "stdafx.h"
+#include <iomanip>
+#include <chrono>
+#include <ctime>
 #include "Clock.h"
+#include "TimeStamp.h"
 
-Clock::Clock()
+ULONGLONG Clock::update_interval_ = 1000;
+
+Clock::Clock() : server_start_tick_(GetCurrentTick()), next_update_tick_(0)
 {
-    serverStartTick_ = this->systemTick();
 }
 
 Clock::~Clock()
 {
 }
 
-tick_t Clock::strToTick(wstr_t str, WCHAR *fmt)
+void Clock::Update(ULONGLONG current_tick)
 {
-    int	year = 0;
-    int	month = 0;
-    int	day = 0;
-    int	hour = 0;
-    int	minute = 0;
-    int	second = 0;
+	if (current_tick < next_update_tick_)
+		return;
 
-    swscanf_s(str.c_str(), fmt, &year, &month, &day, &hour, &minute, &second);
+	TimeStamp current_time_stamp = JS_CLOCK.GetToday();
 
-    //		   초,		분,    시,  일,  월(0부터시작), 년(1900년부터시작)
-    tm time = { second, minute, hour, day, month - 1, year - 1900 };
+	ProcessTimerJob(current_time_stamp);
+	ProcessSchedulerJob(current_time_stamp);
 
-    return mktime(&time);
+	next_update_tick_ = current_tick + update_interval_;
 }
 
-tick_t Clock::serverStartTick()
+void Clock::ProcessTimerJob(const TimeStamp& current_time_stamp)
 {
-    return serverStartTick_;
+	for (TimerJobs::iterator itor = timer_jobs_.begin(); itor != timer_jobs_.end();)
+	{
+		TimerJob* timer_job = (*itor);
+
+		if (current_time_stamp.tick() >= timer_job->timer_.tick())
+		{
+			timer_job->callback_();
+			itor = timer_jobs_.erase(itor);
+		}
+		else
+			++itor;
+	}
 }
 
-tick_t Clock::systemTick()
+void Clock::ProcessSchedulerJob(const TimeStamp& current_time_stamp)
 {
-	return system_clock::to_time_t(system_clock::now());
+	SchedulerJobs destroy_jobs;
+	SchedulerJobs activate_jobs;
+	for (SchedulerJobs::iterator itor = wait_scheduler_jobs_.begin(); itor != wait_scheduler_jobs_.end();++itor)
+	{
+		SchedulerJob* scheduler_job = *itor;
+
+		if (current_time_stamp.tick() >= scheduler_job->end_time_.tick())
+		{
+			Log(L"Destroy Scheduler Job : %s", scheduler_job->GetName().c_str());
+			destroy_jobs.push_back(scheduler_job);
+			continue;
+		}
+
+		if (current_time_stamp.tick() >= scheduler_job->start_time_.tick())
+		{
+			if (scheduler_job->IsAllwayActiveHour())
+				activate_jobs.push_back(scheduler_job);
+			else
+			{
+				if ((scheduler_job->repeat_start_hour_ <= current_time_stamp.hour() && current_time_stamp.hour() <= scheduler_job->repeat_end_hour_)
+					&& (scheduler_job->repeat_start_min_ <= current_time_stamp.minute() && current_time_stamp.minute() <= scheduler_job->repeat_end_min_)
+					&& (scheduler_job->repeat_start_sec_ <= current_time_stamp.sec() && current_time_stamp.sec() <= scheduler_job->repeat_end_sec_))
+				{
+					if (scheduler_job->IsActiveWeek(current_time_stamp.day_week()))
+						activate_jobs.push_back(scheduler_job);
+				}
+			}
+		}
+	}
+
+	if (!destroy_jobs.empty())
+	{
+		for each (SchedulerJobs::value_type value in destroy_jobs)
+		{
+			wait_scheduler_jobs_.remove(value);
+			SAFE_DELETE(value);
+		}
+		
+		destroy_jobs.clear();
+	}
+
+	if (!activate_jobs.empty())
+	{
+		for each (const SchedulerJobs::value_type& value in activate_jobs)
+		{
+			SchedulerJob* scheduler_job = value;
+			scheduler_job->start_callback_();
+			activate_scheduler_jobs_.push_back(scheduler_job);
+		}
+
+		activate_jobs.clear();
+	}
+
+	// 수정중.. 활성화 되어있는 스케쥴 잡 체크
+	for (SchedulerJobs::iterator itor = activate_scheduler_jobs_.begin(); itor != activate_scheduler_jobs_.end(); ++itor)
+	{
+	}
 }
 
-wstr_t Clock::tickToStr(tick_t tick, WCHAR *fmt)
+std::wstring Clock::GetNowMilliSec()
 {
-    array<WCHAR, SIZE_128> timeStr;
+	std::chrono::high_resolution_clock::time_point point = std::chrono::high_resolution_clock::now();
+	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(point.time_since_epoch());
 
-    tm time;
-    localtime_s(&time, &tick);
-    wcsftime(timeStr.data(), timeStr.size(), fmt, &time);
+	std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(ms);
+	std::time_t t = s.count();
+	std::size_t fractional_seconds = ms.count() % 1000;
 
-    return timeStr.data();
+	array<WCHAR, SIZE_8> milli_str;
+	snwprintf(milli_str, L"%03d", (int)(fractional_seconds));
+
+	TimeStamp time_stamp(GetCurrentTick());
+	std::wstring timeString = time_stamp.ToString();
+
+    return time_stamp.ToString() + milli_str.data();
 }
 
-wstr_t Clock::nowTime(WCHAR *fmt)
+TimeStamp Clock::GetToday(INT diff_day)
 {
-    return this->tickToStr(this->systemTick(), fmt);
+	std::time_t tick = 0;
+	tick = GetCurrentTick();
+
+	if (diff_day != 0)
+		tick += diff_day * DayToTick(1);
+
+	TimeStamp time_stamp(tick);
+	return time_stamp;
 }
 
-wstr_t Clock::nowTimeWithMilliSec(WCHAR *fmt)
+DAY_WEEK Clock::GetTodayWeek()
 {
-#if 0
-    timePoint now = system_clock::now();
-    timePoint oldSecond = system_clock::from_time_t(this->systemTick());
-
-    duration<double> milliSecond = now - oldSecond;
-	array<WCHAR, SIZE_8> milliStr;
-	snwprintf(milliStr, L"%03d", (int)(milliSecond.count() * 1000));
-#else
-	high_resolution_clock::time_point point = high_resolution_clock::now();
-	milliseconds ms = duration_cast<milliseconds>(point.time_since_epoch());
-
-	seconds s = duration_cast<seconds>(ms);
-	tick_t t = s.count();
-	std::size_t fractionalSeconds = ms.count() % 1000;
-	array<WCHAR, SIZE_8> milliStr;
-	snwprintf(milliStr, L"%03d", (int)(fractionalSeconds));
-#endif
-    wstr_t timeString = this->tickToStr(this->systemTick(), fmt);
-    timeString += L".";
-	timeString += milliStr.data();
-    return timeString;
+	TimeStamp time_stamp(GetCurrentTick());
+    return time_stamp.day_week();
 }
 
-wstr_t Clock::today()
+void Clock::RegistTimerJob(TimerJob* timer_job)
 {
-    return this->tickToStr(this->systemTick(), DATE_FORMAT);
-}
+	if (timer_job == nullptr)
+		return;
 
-wstr_t Clock::tomorrow()
-{
-    return this->tickToStr(this->systemTick() + DAY_TO_TICK(1), DATE_FORMAT);
+	timer_jobs_.push_back(timer_job);
 }
-
-wstr_t Clock::yesterday()
+void Clock::RegistSchedulerJob(SchedulerJob* scheduler_job)
 {
-    return this->tickToStr(this->systemTick() - DAY_TO_TICK(1), DATE_FORMAT);
-}
+	if (scheduler_job == nullptr)
+		return;
 
-DayOfTheWeek Clock::todayOfTheWeek()
-{
-    tm time;
-    tick_t tick = this->systemTick();
-    localtime_s(&time, &tick);
-    return (DayOfTheWeek)time.tm_wday;
+	wait_scheduler_jobs_.push_back(scheduler_job);
 }

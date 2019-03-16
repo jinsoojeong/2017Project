@@ -19,7 +19,7 @@ class TaskNode
 	int			freqSec_;
 	int			durationSec_;
 
-	tick_t		nextTick_;
+	std::time_t		nextTick_;
 public:
 	TaskNode(WorkObject *workObject, int freqSec, int durationSec);
 	~TaskNode();

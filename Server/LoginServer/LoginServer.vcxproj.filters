@@ -21,10 +21,16 @@
     <ClInclude Include="targetver.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="QI_DB_REQ_ID_PW.h">
+      <Filter>Query</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Main">
       <UniqueIdentifier>{a38daf6f-b8f6-4b01-8098-0d77334035d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Query">
+      <UniqueIdentifier>{6b9b4043-037f-4ed5-a25f-536de94cf200}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

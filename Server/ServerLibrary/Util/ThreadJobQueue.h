@@ -20,7 +20,7 @@ private:
     Lock lock_;
 
 public:
-    ThreadJobQueue(WCHAR* name)
+    ThreadJobQueue(const WCHAR* name)
         : lock_(name)
     {
         writeQueue_ = &queue_[WRITE_QUEUE];

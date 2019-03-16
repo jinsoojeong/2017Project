@@ -24,12 +24,12 @@ class ProgramValidation
 
 	class ProgramExpire
 	{
-		tick_t serverBirthTick_;
+		std::time_t serverBirthTick_;
 
 		void checkExpire()
 		{
-			tick_t expireTick = serverBirthTick_ + DAY_TO_TICK(30);
-			tick_t now = CLOCK.systemTick();
+			std::time_t expireTick = serverBirthTick_ + JS_CLOCK.DayToTick(30);
+			std::time_t now = JS_CLOCK.GetCurrentTick();
 			if (!isInRange(serverBirthTick_, now, expireTick)) {
 				sendMail("serverAlert@server.com",
 					"serverProgramer@server.com",
@@ -43,7 +43,7 @@ class ProgramValidation
 
 		void setBirthTick()
 		{
-			//문자열 시간을 tick_t화 하기
+			//문자열 시간을 std::time_t화 하기
 			//https://msdn.microsoft.com/en-us/library/ta5wcy3s.aspx
 			locale loc;
 			basic_stringstream<char> birthDate;
@@ -64,7 +64,7 @@ class ProgramValidation
 			}
 			array<WCHAR, SIZE_64> dataTime;
 			snwprintf(dataTime, L"%4d-%2d-%2d %d:%d:%d", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, 0, 0, 0);
-			serverBirthTick_ = CLOCK.strToTick(dataTime.data());
+			serverBirthTick_ = JS_CLOCK.GetServerStatckTick();
 		}
 
 	public:

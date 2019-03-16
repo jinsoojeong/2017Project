@@ -123,7 +123,7 @@ HRESULT QueryRecord::moveLast()
 	return S_FALSE;
 }
 
-bool QueryRecord::get(char* fieldName, char* fieldValue)
+bool QueryRecord::get(const char* fieldName, char* fieldValue)
 {
 	try {
 		_variant_t  vtValue;
@@ -138,7 +138,7 @@ bool QueryRecord::get(char* fieldName, char* fieldValue)
 	return false;
 }
 
-bool QueryRecord::get(char* fieldName, wchar_t* fieldValue)
+bool QueryRecord::get(const char* fieldName, wchar_t* fieldValue)
 {
 	try {
 		_variant_t  vtValue;
@@ -153,7 +153,7 @@ bool QueryRecord::get(char* fieldName, wchar_t* fieldValue)
 	return false;
 }
 
-bool QueryRecord::get(char* fieldName, int32_t& fieldValue)
+bool QueryRecord::get(const char* fieldName, int32_t& fieldValue)
 {
 	try {
 		_variant_t  vtValue;
@@ -168,7 +168,7 @@ bool QueryRecord::get(char* fieldName, int32_t& fieldValue)
 	return false;
 }
 
-bool QueryRecord::get(char* fieldName, int64_t& fieldValue)
+bool QueryRecord::get(const char* fieldName, int64_t& fieldValue)
 {
 	try {
 		_variant_t  vtValue;
@@ -183,7 +183,7 @@ bool QueryRecord::get(char* fieldName, int64_t& fieldValue)
 	return false;
 }
 
-bool QueryRecord::get(char* fieldName, float& fieldValue)
+bool QueryRecord::get(const char* fieldName, float& fieldValue)
 {
 	try {
 		_variant_t  vtValue;
@@ -198,7 +198,7 @@ bool QueryRecord::get(char* fieldName, float& fieldValue)
 	return false;
 }
 
-bool QueryRecord::get(char* fieldName, double& fieldValue)
+bool QueryRecord::get(const char* fieldName, double& fieldValue)
 {
 	try {
 		_variant_t  vtValue;
@@ -213,7 +213,7 @@ bool QueryRecord::get(char* fieldName, double& fieldValue)
 	return false;
 }
 
-bool QueryRecord::get(char* fieldName, long& fieldValue)
+bool QueryRecord::get(const char* fieldName, long& fieldValue)
 {
 	try {
 		_variant_t  vtValue;

@@ -8,8 +8,6 @@ typedef UINT64					object_t;
 typedef DWORD					oid_t;
 typedef int32_t					packet_size_t;
 
-typedef std::time_t				tick_t;
-
 typedef std::recursive_mutex	lock_t;
 
 typedef std::string				str_t;
@@ -45,3 +43,17 @@ typedef float				Float;
 typedef TiXmlDocument		xml_t;
 typedef TiXmlElement		xmlNode_t;
 typedef TiXmlHandle			xmlHandle_t;
+
+// Clock
+enum DAY_WEEK : BYTE
+{
+	DAY_SUNDAY,
+	DAY_MONDAY,
+	DAY_TUESDAY,
+	DAY_WEDNESDAY,
+	DAY_THURSDAY,
+	DAY_FRIDAY,
+	DAY_SATURDAY,
+	DAY_MAX
+};
+

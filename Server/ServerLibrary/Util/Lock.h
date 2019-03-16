@@ -13,7 +13,7 @@ private:
 	int				lockingLine_;
 
 public:
-	Lock(WCHAR* name);
+	Lock(const WCHAR* name);
 	virtual ~Lock();
 
 	const WCHAR* name();

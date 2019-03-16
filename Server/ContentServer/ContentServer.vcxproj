@@ -160,7 +160,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ContentServer.h" />
+    <ClInclude Include="MainProcess.h" />
+    <ClInclude Include="QI_DB_REQ_LOAD_DATA.h" />
     <ClInclude Include="Server\User.h" />
     <ClInclude Include="Server\UserManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -168,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ContentServer.cpp" />
+    <ClCompile Include="MainProcess.cpp" />
     <ClCompile Include="Server\User.cpp" />
     <ClCompile Include="Server\UserManager.cpp" />
     <ClCompile Include="stdafx.cpp">

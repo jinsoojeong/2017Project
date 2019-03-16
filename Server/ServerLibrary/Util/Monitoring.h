@@ -60,6 +60,8 @@ public:
 		return (size_t) memInfo.ullTotalPhys - memInfo.ullAvailPhys;
 	}
 
+	DWORD GetNumberOfProcessors() { return num_processors_; }
+
 private:
 	ULARGE_INTEGER last_cpu_;
 	ULARGE_INTEGER last_sys_cpu_;
