@@ -15,10 +15,10 @@ enum IO_OPERATION
 
 class IoData
 {
-	OVERLAPPED		overlapped_;
-	IO_OPERATION	ioType_;
-    size_t  		totalBytes_;
-	size_t			currentBytes_;
+	OVERLAPPED overlapped_;
+	IO_OPERATION ioType_;
+    size_t totalBytes_;
+	size_t currentBytes_;
 	array<char, SOCKET_BUF_SIZE> buffer_;
 
 public:

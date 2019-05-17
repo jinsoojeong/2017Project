@@ -40,7 +40,9 @@ class MemoryLeckDetct
 public:
     MemoryLeckDetct()
     {
+		// 디버그 모드에서 메모리 누수 체크
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
         // Send all reports to STDOUT
         _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);

@@ -42,6 +42,12 @@ void QueryStatement::addArg(WCHAR *fmt, T value)
 		query_ += L" ";
 	}
 	query_ += buffer.data();
+
+	std::list<int> s;
+	for each (std::list<int>::value_type value in s)
+	{
+
+	}
 }
 
 void QueryStatement::addParam(CHAR *value)

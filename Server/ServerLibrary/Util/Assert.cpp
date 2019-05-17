@@ -3,9 +3,9 @@
 
 void Assert(int condition, LPCWSTR conditionStr, LPCWSTR fileName, int lineNo)
 {
-    if (condition) {
+    if (condition)
         return;
-    }
+    
     shutdownServer();
 
     wstr_t	msg;

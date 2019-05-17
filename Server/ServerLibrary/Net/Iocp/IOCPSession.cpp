@@ -195,9 +195,8 @@ Package *IOCPSession::onRecv(size_t transferSize)
 	packet_size_t offset = 0;
 	offset += ioData_[IO_READ].setupTotalBytes();
 
-	if (this->isRecving(transferSize)) {
+	if (this->isRecving(transferSize))
 		return nullptr;
-	}
 
 	const size_t packetHeaderSize = sizeof(packet_size_t);
 	packet_size_t packetDataSize = (packet_size_t)(ioData_[IO_READ].totalByte() - packetHeaderSize);

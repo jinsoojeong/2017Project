@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+Server/.vs/ServerCore/v15/ipch/ef9f12159d06d073.ipch
+Server/.vs/ServerCore/v15/ipch/a157d4a86f06cc97.ipch
+Server/.vs/ServerCore/v15/ipch/c369117fa16cd747.ipch
+Server/.vs/ServerCore/v15/Browse.VC.db
+Server/.vs/ServerCore/v15/Solution.VC.db

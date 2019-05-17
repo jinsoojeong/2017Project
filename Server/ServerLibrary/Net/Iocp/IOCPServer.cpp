@@ -23,8 +23,8 @@ bool IOCPServer::createListenSocket()
 
     SOCKADDR_IN serverAddr;
     serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons((u_short)port_);
-	inet_pton(AF_INET, ip_, &(serverAddr.sin_addr));
+	serverAddr.sin_port = htons((u_short)port());
+	inet_pton(AF_INET, ip().c_str(), &(serverAddr.sin_addr));
 
 	int reUseAddr = 1;
 	setsockopt(listenSocket_, SOL_SOCKET, SO_REUSEADDR, (char *)&reUseAddr, (int)sizeof(reUseAddr));
@@ -44,7 +44,7 @@ bool IOCPServer::createListenSocket()
 
 	array<char, SIZE_64> ip;
 	inet_ntop(AF_INET, &(serverAddr.sin_addr), ip.data(), ip.size());
-	Log(L"* server listen socket created, ip: %S, port: %d", ip.data(), port_);
+	Log(L"* server listen socket created, ip: %S, port: %d", ip.data(), port());
     return true;
 }
 
@@ -52,12 +52,12 @@ bool IOCPServer::run()
 {
 	Server::run();
 
-	if (MAX_IOCP_THREAD < workerThreadCount_) {
-		ErrorLog(L"! workerThread limit[%d], but config setting [%d]", MAX_IOCP_THREAD, workerThreadCount_);
+	if (MAX_IOCP_THREAD < worker_count()) {
+		ErrorLog(L"! workerThread limit[%d], but config setting [%d]", MAX_IOCP_THREAD, worker_count());
 		return false;
 	}
 
-	iocp_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, workerThreadCount_);
+	iocp_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, worker_count());
 
 	if (iocp_ == nullptr)
 		return false;
@@ -67,10 +67,10 @@ bool IOCPServer::run()
 	// 
 	acceptThread_ = MAKE_THREAD(IOCPServer, acceptThread);
 
-	for (int i = 0; i < workerThreadCount_; ++i) 
+	for (int i = 0; i < worker_count(); ++i)
 		workerThread_[i] = MAKE_THREAD(IOCPServer, workerThread);
 	
-	status_ = SERVER_READY;
+	Server::SetServerState(SERVER_READY);
 
 	return true;
 }
@@ -129,7 +129,7 @@ DWORD WINAPI IOCPServer::acceptThread(LPVOID serverPtr)
 		acceptSocket = WSAAccept(server->listenSocket(), (struct sockaddr *)&recvAddr, &addrLen, NULL, 0);
 		if (acceptSocket == SOCKET_ERROR) 
 		{
-			if (!server->status() == SERVER_STOP) 
+			if (!server->state() == SERVER_STOP) 
 			{
 				Log(L"Accept Stop! - Server Stop");
 				break;
@@ -137,7 +137,7 @@ DWORD WINAPI IOCPServer::acceptThread(LPVOID serverPtr)
 		}
 		server->onAccept(acceptSocket, recvAddr);
 
-		if (server->status() != SERVER_READY) {
+		if (server->state() != SERVER_READY) {
 			break;
 		}
 	}
@@ -148,15 +148,17 @@ DWORD WINAPI IOCPServer::workerThread(LPVOID serverPtr)
 {
 	IOCPServer *server = (IOCPServer *)serverPtr;
 
-	while (!_shutdown) {
-		IoData			*ioData = nullptr;
+	while (!_shutdown) 
+	{
+		IoData *ioData = nullptr;
 		IOCPSession	*session = nullptr;
-		DWORD			transferSize;
+		DWORD transferSize;
 
 		BOOL ret = GetQueuedCompletionStatus(server->iocp(), &transferSize, (PULONG_PTR)&session, (LPOVERLAPPED *)&ioData, INFINITE);
-		if (!ret) {
+		
+		if (!ret)
 			continue;
-		}
+		
 		if (session == nullptr) {
 			Log(L"! socket data broken");
 			return 0;
@@ -176,9 +178,8 @@ DWORD WINAPI IOCPServer::workerThread(LPVOID serverPtr)
 		case IO_READ:
 			{
 				Package *package = session->onRecv((size_t)transferSize);
-				if (package != nullptr) {
-					server->putPackage(package);
-				}
+				if (package != nullptr)
+					server->EnqueueMsg(package);
 			}
 			continue;
 

@@ -5,7 +5,7 @@
 class TerminalManager : public Singleton<TerminalManager>
 {
 	unordered_map<wstr_t, Terminal*> terminalPool_;
-	Server						*server_;
+	Server *server_;
 
 public:
 	TerminalManager();

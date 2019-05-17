@@ -84,7 +84,7 @@ CONNECT_START:
 			goto CONNECT_START;
 		}
 
-		server_->putPackage(package);
+		server_->EnqueueMsg(package);
 	}
 }
 
