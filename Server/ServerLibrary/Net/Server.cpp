@@ -146,13 +146,13 @@ bool Server::initializeModule()
 				}
 			}
 
-			//ReportLog(LOG_FATAL_FILE, L"HeapSetInformation Failed - heap(%s):%d, error:%d", heap_type, i, error_code);
+			Log(L"HeapSetInformation Failed - heap(%s):%d, error:%d", heap_type, i, error_code);
 		}
 	}
 
 	total_lfh_count += enable_lfh_count;
 
-	printf("Low-fragmentation Heap setting %d %d %d \n", total_heap_count, total_lfh_count, enable_lfh_count);
+	Log(L"Low-fragmentation Heap setting %d %d %d \n", total_heap_count, total_lfh_count, enable_lfh_count);
 
 	return true;
 }

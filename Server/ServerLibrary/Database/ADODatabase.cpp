@@ -11,7 +11,7 @@ ADODatabase::ADODatabase(std::wstring process_name) : process_name_(process_name
 	dbConnection_.CreateInstance(__uuidof(ADODB::Connection));
 	if (dbConnection_ == NULL) 
 	{
-		ErrorLog(L"! Database init fail");
+		Log(L"! Database init fail");
 	}
 
     const int TIME_OUT = 30;

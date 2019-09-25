@@ -16,8 +16,9 @@ IOCPServer::~IOCPServer()
 bool IOCPServer::createListenSocket()
 {
     listenSocket_ = WSASocket(AF_INET, SOCK_STREAM, NULL, NULL, 0, WSA_FLAG_OVERLAPPED);
-    if (listenSocket_ == INVALID_SOCKET) {
-        ErrorLog(L"! listenSocket fail");
+    if (listenSocket_ == INVALID_SOCKET) 
+	{
+        Log(L"! listenSocket fail");
         return false;
     }
 
@@ -30,15 +31,17 @@ bool IOCPServer::createListenSocket()
 	setsockopt(listenSocket_, SOL_SOCKET, SO_REUSEADDR, (char *)&reUseAddr, (int)sizeof(reUseAddr));
 
     int retval = ::bind(listenSocket_, (SOCKADDR *)&serverAddr, sizeof(serverAddr));
-    if (retval == SOCKET_ERROR) {
-        ErrorLog(L"! bind fail");
+    if (retval == SOCKET_ERROR) 
+	{
+        Log(L"! bind fail");
         return false;
     }
 
     const int BACK_SOCKETS = 5;
     retval = ::listen(listenSocket_, BACK_SOCKETS);
-    if (retval == SOCKET_ERROR) {
-        ErrorLog(L"! listen fail");
+    if (retval == SOCKET_ERROR) 
+	{
+        Log(L"! listen fail");
         return false;
     }
 
@@ -52,8 +55,9 @@ bool IOCPServer::run()
 {
 	Server::run();
 
-	if (MAX_IOCP_THREAD < worker_count()) {
-		ErrorLog(L"! workerThread limit[%d], but config setting [%d]", MAX_IOCP_THREAD, worker_count());
+	if (MAX_IOCP_THREAD < worker_count()) 
+	{
+		Log(L"! workerThread limit[%d], but config setting [%d]", MAX_IOCP_THREAD, worker_count());
 		return false;
 	}
 

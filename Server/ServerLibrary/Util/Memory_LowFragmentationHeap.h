@@ -8,13 +8,6 @@ class LowFragmentationHeap
 public:
 	LowFragmentationHeap()
 	{
-		static bool init = false;
-
-		if (init)
-			return;
-
-		init = true;
-
 		ULONG heap_flag_value = 2;
 		HANDLE heaps[100];
 		DWORD heap_count = GetProcessHeaps(100, heaps);

@@ -5,7 +5,6 @@
 #include "Type.h"
 
 #define Log(arg, ...)				SystemLog::GetSingleton().log(arg, __VA_ARGS__);
-#define ErrorLog(arg, ...)			SystemLog::GetSingleton().log(arg, __VA_ARGS__); ::ExitProcess(0);
 
 //-----------------------------------------------------------------//
 class LogBase
