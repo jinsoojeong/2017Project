@@ -34,7 +34,7 @@ LogFile::~LogFile()
     }
 
     //뒤에 로그파일이 붙으면 종료시, 종료시각을 파일이름 뒤에 붙여줍니다.
-	TimeStamp time_stamp = JS_CLOCK.GetToday();
+	TimeStamp time_stamp = Clock::GetCurrentTimeStamp();
 
     std::wstring closeFileName = fileName_.substr(0, found);
 	closeFileName += time_stamp.ToString();
@@ -108,7 +108,7 @@ void LogWriter::log(const WCHAR *fmt, ...)
 
 void LogWriter::log(const WCHAR *fmt, va_list args)
 {
-	wstr_t logMessage = JS_CLOCK.GetNowMilliSec();
+	wstr_t logMessage = Clock::GetCurrentTimeStamp().ToString();
 	std::thread::id threadId = GET_CURRENT_THREAD_ID();
 
 	logMessage += L"\t";

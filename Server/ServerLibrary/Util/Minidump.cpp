@@ -21,7 +21,7 @@ LONG WINAPI MiniDump::execptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
 		return 0;
     }
 
-	TimeStamp time_stamp = JS_CLOCK.GetToday();
+	TimeStamp time_stamp = Clock::GetCurrentTimeStamp();
 
     std::wstring dumpPatch;
     dumpPatch += time_stamp.ToString();

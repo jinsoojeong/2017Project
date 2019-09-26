@@ -16,7 +16,7 @@ TaskNode::~TaskNode()
 
 void TaskNode::nextTick()
 {
-	nextTick_ = JS_CLOCK.GetCurrentTick() + (std::time_t)freqSec_;
+	nextTick_ = Clock::GetCurrentTick() + (std::time_t)freqSec_;
 }
 
 bool TaskNode::expired()
@@ -26,7 +26,7 @@ bool TaskNode::expired()
 	
 	if (durationSec_ != TICK_INFINTY) 
 	{
-		if (durationSec_ < JS_CLOCK.GetCurrentTick())
+		if (durationSec_ < Clock::GetCurrentTick())
 			return true;
 	}
 
@@ -35,7 +35,7 @@ bool TaskNode::expired()
 
 void TaskNode::tick()
 {
-	if (nextTick_ < JS_CLOCK.GetCurrentTick())
+	if (nextTick_ < Clock::GetCurrentTick())
 	{
 		workObject_->tick();
 

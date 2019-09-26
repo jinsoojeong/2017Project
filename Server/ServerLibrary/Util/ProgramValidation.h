@@ -28,8 +28,8 @@ class ProgramValidation
 
 		void checkExpire()
 		{
-			std::time_t expireTick = serverBirthTick_ + JS_CLOCK.DayToTick(30);
-			std::time_t now = JS_CLOCK.GetCurrentTick();
+			std::time_t expireTick = serverBirthTick_ + Clock::DayToTick(30);
+			std::time_t now = Clock::GetCurrentTick();
 			if (!isInRange(serverBirthTick_, now, expireTick)) {
 				sendMail("serverAlert@server.com",
 					"serverProgramer@server.com",
@@ -64,7 +64,7 @@ class ProgramValidation
 			}
 			array<WCHAR, SIZE_64> dataTime;
 			snwprintf(dataTime, L"%4d-%2d-%2d %d:%d:%d", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, 0, 0, 0);
-			serverBirthTick_ = JS_CLOCK.GetServerStatckTick();
+			serverBirthTick_ = Clock::GetCurrentTick();
 		}
 
 	public:

@@ -100,5 +100,5 @@ std::time_t Session::heartBeat()
 
 void Session::updateHeartBeat()
 {
-	last_heart_beat_ = JS_CLOCK.GetCurrentTick();
+	last_heart_beat_ = Clock::GetCurrentTick();
 }

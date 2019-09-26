@@ -242,6 +242,7 @@
     <ClCompile Include="Net\Terminal\Terminal.cpp" />
     <ClCompile Include="Net\Terminal\TerminalManager.cpp" />
     <ClCompile Include="Net\Terminal\TerminalSession.cpp" />
+    <ClCompile Include="SchedulerJob.cpp" />
     <ClCompile Include="Shutdown.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

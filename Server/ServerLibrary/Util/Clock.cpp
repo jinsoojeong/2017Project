@@ -7,7 +7,7 @@
 
 ULONGLONG Clock::update_interval_ = 1000;
 
-Clock::Clock() : server_start_tick_(GetCurrentTick()), next_update_tick_(0)
+Clock::Clock() : next_update_tick_(0)
 {
 }
 
@@ -20,7 +20,7 @@ void Clock::Update(ULONGLONG current_tick)
 	if (current_tick < next_update_tick_)
 		return;
 
-	TimeStamp current_time_stamp = JS_CLOCK.GetToday();
+	TimeStamp current_time_stamp = Clock::GetCurrentTimeStamp();
 
 	ProcessTimerJob(current_time_stamp);
 	ProcessSchedulerJob(current_time_stamp);
@@ -38,6 +38,7 @@ void Clock::ProcessTimerJob(const TimeStamp& current_time_stamp)
 		{
 			timer_job->callback_();
 			itor = timer_jobs_.erase(itor);
+			SAFE_DELETE(timer_job);
 		}
 		else
 			++itor;
@@ -46,90 +47,53 @@ void Clock::ProcessTimerJob(const TimeStamp& current_time_stamp)
 
 void Clock::ProcessSchedulerJob(const TimeStamp& current_time_stamp)
 {
-	SchedulerJobs destroy_jobs;
-	SchedulerJobs activate_jobs;
-	for (SchedulerJobs::iterator itor = wait_scheduler_jobs_.begin(); itor != wait_scheduler_jobs_.end();++itor)
+	for (SchedulerJobs::iterator itor = wait_scheduler_jobs_.begin(); itor != wait_scheduler_jobs_.end();)
 	{
 		SchedulerJob* scheduler_job = *itor;
-
-		if (current_time_stamp.tick() >= scheduler_job->end_time_.tick())
+		if (scheduler_job->IsExpire())
 		{
 			Log(L"Destroy Scheduler Job : %s", scheduler_job->GetName().c_str());
-			destroy_jobs.push_back(scheduler_job);
-			continue;
-		}
 
-		if (current_time_stamp.tick() >= scheduler_job->start_time_.tick())
+			itor = wait_scheduler_jobs_.erase(itor);
+			scheduler_job->DestroyCompletion();
+			SAFE_DELETE(scheduler_job);
+		}
+		else
 		{
-			if (scheduler_job->IsAllwayActiveHour())
-				activate_jobs.push_back(scheduler_job);
-			else
+			if (scheduler_job->IsActive())
 			{
-				if ((scheduler_job->repeat_start_hour_ <= current_time_stamp.hour() && current_time_stamp.hour() <= scheduler_job->repeat_end_hour_)
-					&& (scheduler_job->repeat_start_min_ <= current_time_stamp.minute() && current_time_stamp.minute() <= scheduler_job->repeat_end_min_)
-					&& (scheduler_job->repeat_start_sec_ <= current_time_stamp.sec() && current_time_stamp.sec() <= scheduler_job->repeat_end_sec_))
-				{
-					if (scheduler_job->IsActiveWeek(current_time_stamp.day_week()))
-						activate_jobs.push_back(scheduler_job);
-				}
+				itor = wait_scheduler_jobs_.erase(itor);
+				scheduler_job->StartCompletion();
+				activate_scheduler_jobs_.push_back(scheduler_job);
 			}
 		}
+			
+		++itor;
 	}
 
-	if (!destroy_jobs.empty())
+	for (SchedulerJobs::iterator itor = activate_scheduler_jobs_.begin(); itor != activate_scheduler_jobs_.end();)
 	{
-		for each (SchedulerJobs::value_type value in destroy_jobs)
+		SchedulerJob* scheduler_job = *itor;
+		if (!scheduler_job->IsActive())
 		{
-			wait_scheduler_jobs_.remove(value);
-			SAFE_DELETE(value);
-		}
-		
-		destroy_jobs.clear();
-	}
-
-	if (!activate_jobs.empty())
-	{
-		for each (const SchedulerJobs::value_type& value in activate_jobs)
-		{
-			SchedulerJob* scheduler_job = value;
-			scheduler_job->start_callback_();
-			activate_scheduler_jobs_.push_back(scheduler_job);
+			itor = activate_scheduler_jobs_.erase(itor);
+			scheduler_job->StopCompletion();
+			wait_scheduler_jobs_.push_back(scheduler_job);
 		}
 
-		activate_jobs.clear();
-	}
-
-	// 수정중.. 활성화 되어있는 스케쥴 잡 체크
-	for (SchedulerJobs::iterator itor = activate_scheduler_jobs_.begin(); itor != activate_scheduler_jobs_.end(); ++itor)
-	{
+		++itor;
 	}
 }
 
-std::wstring Clock::GetNowMilliSec()
-{
-	std::chrono::high_resolution_clock::time_point point = std::chrono::high_resolution_clock::now();
-	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(point.time_since_epoch());
-
-	std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(ms);
-	std::time_t t = s.count();
-	std::size_t fractional_seconds = ms.count() % 1000;
-
-	array<WCHAR, SIZE_8> milli_str;
-	snwprintf(milli_str, L"%03d", (int)(fractional_seconds));
-
-	TimeStamp time_stamp(GetCurrentTick());
-	std::wstring timeString = time_stamp.ToString();
-
-    return time_stamp.ToString() + milli_str.data();
-}
-
-TimeStamp Clock::GetToday(INT diff_day)
+TimeStamp Clock::GetCurrentTimeStamp(INT diff_day, INT diff_hour, INT diff_min, INT diff_sec)
 {
 	std::time_t tick = 0;
 	tick = GetCurrentTick();
 
-	if (diff_day != 0)
-		tick += diff_day * DayToTick(1);
+	if (diff_day != 0) tick += diff_day * DayToTick(1);
+	if (diff_hour != 0) tick += diff_hour * HourToTick(1);
+	if (diff_min != 0) tick += diff_min * MinuteToTick(1);
+	if (diff_sec != 0) tick += diff_sec;
 
 	TimeStamp time_stamp(tick);
 	return time_stamp;

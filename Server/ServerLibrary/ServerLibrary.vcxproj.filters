@@ -105,6 +105,9 @@
     <ClCompile Include="Util\TimeStamp.cpp">
       <Filter>Utility\Clock</Filter>
     </ClCompile>
+    <ClCompile Include="SchedulerJob.cpp">
+      <Filter>Utility\Clock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ServerLibrary.h" />
