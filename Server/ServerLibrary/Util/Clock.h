@@ -14,7 +14,7 @@ public:
     Clock();
     ~Clock();
 
-	void Update(ULONGLONG current_tick);
+	void Update();
 	void RegistTimerJob(TimerJob* timer_job);
 	void RegistSchedulerJob(SchedulerJob* scheduler_job);
 

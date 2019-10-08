@@ -8,7 +8,7 @@ class SchedulerJob
 {
 public:
 	SchedulerJob(std::wstring name, TimeStamp start_time, TimeStamp end_time);
-	SchedulerJob(std::wstring name, TimeStamp start_time, TimeStamp end_time, WORD start_hms, WORD end_hms, WORD active_week);
+	SchedulerJob(std::wstring name, TimeStamp start_time, TimeStamp end_time, WORD active_week, BYTE repeat_start_hour, BYTE repeat_end_hour, BYTE repeat_start_min, BYTE repeat_end_min, BYTE repeat_start_sec, BYTE repeat_end_sec);
 	void SetStartCompletion(SchedulerStartCallback start_callback) { start_callback_ = start_callback; }
 	void SetStopCompletion(SchedulerStopCallback stop_callback) { stop_callback_ = stop_callback; }
 	void SetDestroyCompletion(SchedulerDestroyCallback destroy_callback) { destroy_callback_ = destroy_callback; }
@@ -18,7 +18,7 @@ private:
 	friend class Clock;
 	SchedulerJob() {};
 
-	bool IsActiveWeek(WORD day_week);
+	bool IsActiveDayWeek(WORD today_week);
 	bool IsAllwayActive();
 	bool IsActive();
 	bool IsExpire();

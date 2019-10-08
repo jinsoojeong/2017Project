@@ -156,7 +156,8 @@ void ADODatabase::execute()
 		command->CommandText = sqlQuery;
 		_variant_t resultVal;
 
-		switch (statement->type()) {
+		switch (statement->type()) 
+		{
 		case QUERY_NOT_RETURN:
 			record = command->Execute(&resultVal, NULL, ADODB::adCmdText | ADODB::adExecuteNoRecords);
 			break;

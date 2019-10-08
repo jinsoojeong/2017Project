@@ -15,8 +15,10 @@ Clock::~Clock()
 {
 }
 
-void Clock::Update(ULONGLONG current_tick)
+void Clock::Update()
 {
+	ULONGLONG current_tick = GetTickCount64();
+
 	if (current_tick < next_update_tick_)
 		return;
 
@@ -52,11 +54,11 @@ void Clock::ProcessSchedulerJob(const TimeStamp& current_time_stamp)
 		SchedulerJob* scheduler_job = *itor;
 		if (scheduler_job->IsExpire())
 		{
-			Log(L"Destroy Scheduler Job : %s", scheduler_job->GetName().c_str());
-
 			itor = wait_scheduler_jobs_.erase(itor);
 			scheduler_job->DestroyCompletion();
 			SAFE_DELETE(scheduler_job);
+
+			continue;
 		}
 		else
 		{
@@ -65,6 +67,8 @@ void Clock::ProcessSchedulerJob(const TimeStamp& current_time_stamp)
 				itor = wait_scheduler_jobs_.erase(itor);
 				scheduler_job->StartCompletion();
 				activate_scheduler_jobs_.push_back(scheduler_job);
+
+				continue;
 			}
 		}
 			
@@ -79,6 +83,8 @@ void Clock::ProcessSchedulerJob(const TimeStamp& current_time_stamp)
 			itor = activate_scheduler_jobs_.erase(itor);
 			scheduler_job->StopCompletion();
 			wait_scheduler_jobs_.push_back(scheduler_job);
+
+			continue;
 		}
 
 		++itor;
