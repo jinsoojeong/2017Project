@@ -19,8 +19,8 @@ Server::Server(ContentsProcess *contentsProcess) : state_(SERVER_STOP)
 Server::~Server()
 {
 	shutdownServer();
-
 	SetServerState(SERVER_STOP);
+	WSACleanup();
 	SAFE_DELETE(contentsProcess_);
 
 	Log(L"# End network base");
@@ -68,11 +68,28 @@ bool Server::initialize()
 	if (initializeModule() == false)
 		return false;
 
-	//static LowFragmentationHeap lfh;
+	if (initializeWinSock() == false)
+		return false;
+
+
+
 	static WinSocket winsocket;
 	static MiniDump minidump;
 	static ProgramValidation programValidation;
 	static SessionMonitor sessionMonitor;
+
+	return true;
+}
+
+bool Server::initializeWinSock()
+{
+	WSADATA wsa_;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa_) != 0)
+	{
+		return false;
+
+		//exit(0);
+	}
 
 	return true;
 }
@@ -94,6 +111,7 @@ bool Server::initializeModule()
 		return false;
 	}
 
+	//http://msdn.microsoft.com/ko-kr/library/windows/desktop/aa366750(v=vs.85).aspx
 	HANDLE process_heap = GetProcessHeap();
 	HANDLE crt_heap = reinterpret_cast<HANDLE>(_get_heap_handle());
 

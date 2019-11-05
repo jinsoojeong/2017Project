@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "dbghelp.h"
-// 참고 http://msdn.microsoft.com/ko-kr/library/windows/desktop/ms680360(v=vs.85).aspx
 
 //dump 함수 포인터
 typedef BOOL(WINAPI *WRITEDUMP)(

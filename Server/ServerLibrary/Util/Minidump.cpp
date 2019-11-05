@@ -16,7 +16,8 @@ LONG WINAPI MiniDump::execptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
 
     HMODULE dumpDll = nullptr;
     dumpDll = ::LoadLibraryA("DBGHELP.DLL");
-    if (!dumpDll) {
+    if (!dumpDll) 
+	{
 		printf("! DBGHelp.dll not loaded\n");
 		return 0;
     }
@@ -28,7 +29,8 @@ LONG WINAPI MiniDump::execptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
     dumpPatch += L".dmp";
 
     HANDLE file = ::CreateFile(dumpPatch.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (file == INVALID_HANDLE_VALUE) {
+    if (file == INVALID_HANDLE_VALUE) 
+	{
 		printf("! dump file not making\n");
         return 0;
     }
@@ -39,10 +41,12 @@ LONG WINAPI MiniDump::execptionFilter(struct _EXCEPTION_POINTERS *exceptionInfo)
     info.ClientPointers = NULL;
 
     WRITEDUMP dumpFunc = (WRITEDUMP)::GetProcAddress(dumpDll, "MiniDumpWriteDump");
-    if (dumpFunc(GetCurrentProcess(), GetCurrentProcessId(), file, MiniDumpNormal, &info, NULL, NULL) == FALSE) {
+    if (dumpFunc(GetCurrentProcess(), GetCurrentProcessId(), file, MiniDumpNormal, &info, NULL, NULL) == FALSE) 
+	{
 		printf("! dump file saving error\n");
         return 0;
     }
+
     ::CloseHandle(file);
 
     return EXCEPTION_CONTINUE_SEARCH;

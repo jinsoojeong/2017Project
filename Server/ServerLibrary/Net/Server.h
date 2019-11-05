@@ -37,6 +37,7 @@ protected:
 
 private:
 	bool static initializeModule();
+	bool static initializeWinSock();
 
 	std::string ip_;
 	int port_;

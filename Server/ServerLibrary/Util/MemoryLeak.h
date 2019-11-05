@@ -4,20 +4,10 @@
 #ifndef _DEBUG
 #define USE_VISUAL_LEAK_DETECTOR
 #endif
-
-#ifdef USE_VISUAL_LEAK_DETECTOR
-//#include <vld.h>
-//http://hoororyn.tistory.com/2
-//단 vld 의 경우 프로그램 종료시의 메모리 릭도 탐지해 표시함 ;ㅁ;
-#else //USE_VISUAL_LEAK_DETECTOR
-
-//메모리 누수 이슈
-//http://support.microsoft.com/kb/601929/ko
-
 #define _CRTDBG_MAP_ALLOC
 #include "crtdbg.h"
 
-#if 0 //실제 내부는 아래와 같이 선언되어 있다.
+#if 0
 #ifdef  _CRTDBG_MAP_ALLOC
 
 #define   malloc(s)
@@ -40,10 +30,7 @@ class MemoryLeckDetct
 public:
     MemoryLeckDetct()
     {
-		// 디버그 모드에서 메모리 누수 체크
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-        // Send all reports to STDOUT
         _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
         _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
@@ -56,11 +43,8 @@ public:
 
     ~MemoryLeckDetct()
     {
-        //서버 종료시 메모리 체크해줍니다.
         _ASSERTE(_CrtCheckMemory());
     }
 };
 
-//@@@ 일단... 방해;;; 안씀
-//static MemoryLeckDetct leck;
-#endif //USE_VISUAL_LEAK_DETECTOR
+static MemoryLeckDetct leck;
