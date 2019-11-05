@@ -71,9 +71,6 @@ bool Server::initialize()
 	if (initializeWinSock() == false)
 		return false;
 
-
-
-	static WinSocket winsocket;
 	static MiniDump minidump;
 	static ProgramValidation programValidation;
 	static SessionMonitor sessionMonitor;
